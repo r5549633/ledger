@@ -102,6 +102,7 @@ nav button{flex:1;border:0;background:none;color:var(--sub);font:inherit;font-si
 .ag{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px;margin-top:14px}.ag:first-child{margin-top:4px}.ag+.row{border-top:0}
 .ubar{width:140px;max-width:40vw;height:5px;border-radius:3px;background:var(--soft);margin-top:5px;overflow:hidden}.ubar i{display:block;height:100%}
 #mjC .r small{display:block;color:var(--sub);font-size:12px;margin-top:2px}.mon .m3{margin-top:6px}
+.dots{display:inline-flex;gap:3px;vertical-align:middle}.dots i{width:9px;height:9px;border-radius:50%}.dots .w{background:var(--up)}.dots .l{background:var(--down)}
 </style></head><body><div id="app"><main>
 
 <section class="tab on" id="t-home">
@@ -390,7 +391,10 @@ function renderCtx(){const e=$('#ctx');if(!e)return;let h='';
     else{const dca=sk==='定期定額',base=x=>x.code.replace('定期定額','').trim(),hs=(D&&D.holdings)||[],hd=hs.find(x=>base(x)===c&&x.code.includes('定期定額')===dca),nm=(hs.find(x=>base(x)===c&&x.name)||{}).name||'';
       h=`<b>${esc(nm||c)}</b> `+(hd?`庫存 ${hd.qty.toLocaleString()} 股 <small>· 均價 ${IH((hd.cost/hd.qty).toFixed(2))} · 損益</small> <span class="${ih?'':hd.gain>=0?'up':'down'}">${IH(hd.gainPct)}</span>`:`<small>目前沒有${dca?'定期定額':'現股'}庫存</small>`);
       if(sk==='賣出'&&qty()>(hd?hd.qty:0))h+=' <span class="warn">⚠ 超過庫存</span>'}}
-  else{const mj=S(D&&D.summary,'麻將記帳').value,l=R&&R.mahjong&&R.mahjong[0];h=`累計 <b class="${mj>=0?'up':'down'}">${sg(mj)}</b>${l?` <small>· 最近一場 ${l.date} ${l.result} ${l.amount.toLocaleString()}</small>`:''}`}
+  else{const g=((R&&R.mahjong)||[]).slice(0,5);
+    if(!g.length)h='<small>還沒有麻將記錄</small>';
+    else{const w=g.filter(x=>x.result==='贏').length,net=g.reduce((p,x)=>p+(x.result==='贏'?x.amount:-x.amount),0);
+      h=`近 ${g.length} 場 <span class="dots">${g.slice().reverse().map(x=>`<i class="${x.result==='贏'?'w':'l'}"></i>`).join('')}</span> <b>${w} 勝 ${g.length-w} 敗</b> <small>· 勝率 ${Math.round(w/g.length*100)}% · ${net>=0?'贏':'輸'}</small> <b class="${hid?'':net>=0?'up':'down'}">${H(Math.abs(net).toLocaleString())}</b>`}}
   e.innerHTML=h}
 function drawCats(){$('#cats').innerHTML=CATS[kind].map(c=>`<button class="chip${c===cat?' on':''}" data-c="${c}">${icon(c)} ${c}</button>`).join('')}
 function setKind(k){if(ed&&ed.orig.length===2&&k!=='轉帳')return toast('一般記錄和轉帳不能互相切換，請回 Sheet 修改');kind=k;cat='';$$('#kind button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));$('#acc2').style.display=k==='轉帳'?'':'none';drawCats();updGo();render()}
