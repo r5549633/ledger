@@ -105,6 +105,7 @@ nav button{flex:1;border:0;background:none;color:var(--sub);font:inherit;font-si
 .dots{display:inline-flex;gap:3px;vertical-align:middle}.dots i{width:9px;height:9px;border-radius:50%}.dots .w{background:var(--up)}.dots .l{background:var(--down)}
 .dr .seg.mini{flex:0 0 auto;margin:0;padding:3px}.dr .seg.mini button{flex:0 0 auto;padding:7px 11px;font-size:14px}
 .amt.sa{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15}.amt.sa small{font-size:12px;font-weight:500;color:var(--sub)}.amt.sa b{font-size:30px;white-space:nowrap}.dr input{flex-basis:132px!important}
+.hq{font-size:13px;color:var(--sub);margin-left:4px;font-weight:400}
 </style></head><body><div id="app"><main>
 
 <section class="tab on" id="t-home">
@@ -321,7 +322,7 @@ function render(){hideSplash();
   $('#ug').innerHTML=ih?'******':sg(ug)+'<span class="pc">（'+S(s,'未實現總損益%').text+'）</span>';$('#ug').className='big '+(ih?'':cl(ug));
   $('#rg').innerHTML='已實現損益 '+(ih?'******':`<span class="${cl(rv)}">${sg(rv)}（${S(s,'已實現總損益%').text}）</span>`);$('#rg').className='';
   $('#sc').textContent=IH(S(s,'股票總成本').value.toLocaleString());$('#sv').textContent=IH(S(s,'股票總現值').value.toLocaleString());$('#sv').className='';
-  const hr=h=>{const c=h.gain>=0?'up':'down';return`<div class="hold" data-h="${h.code}" style="cursor:pointer"><div>${h.code.replace('定期定額','').trim()}<small>${h.qty} 股</small></div><div class="r g ${c}" style="font-size:14px;font-weight:700">${sg(h.gain)}(${h.gainPct})</div><div class="r" style="font-size:14px;line-height:1.5"><div><span style="color:var(--sub)">成本</span> <span class="n">${h.cost.toLocaleString()}</span></div><div><span style="color:var(--sub)">現值</span> <span class="n">${h.value.toLocaleString()}</span></div></div></div>`},sec=(t,a)=>a.length?`<div class="sub">${t}</div>`+a.map(hr).join(''):'';
+  const hr=h=>{const c=h.gain>=0?'up':'down';return`<div class="hold" data-h="${h.code}" style="cursor:pointer"><div>${h.code.replace('定期定額','').trim()} <span class="hq">${h.qty.toLocaleString()} 股</span><small>成交均價 ${h.avg!=null?Number(h.avg).toFixed(2):h.qty?(h.cost/h.qty).toFixed(2):'-'}</small></div><div class="r g ${c}" style="font-size:14px;font-weight:700">${sg(h.gain)}(${h.gainPct})</div><div class="r" style="font-size:14px;line-height:1.5"><div><span style="color:var(--sub)">成本</span> <span class="n">${h.cost.toLocaleString()}</span></div><div><span style="color:var(--sub)">現值</span> <span class="n">${h.value.toLocaleString()}</span></div></div></div>`},sec=(t,a)=>a.length?`<div class="sub">${t}</div>`+a.map(hr).join(''):'';
   $('#holds').innerHTML=ih?'<div class="hold"><b>******</b></div>':sec('定期定額',D.holdings.filter(h=>h.code.includes('定期定額')))+sec('現股',D.holdings.filter(h=>!h.code.includes('定期定額')))||'<div class="empty">沒有持股</div>';
   const nm={};D.holdings.forEach(h=>{if(h.name)nm[h.code.replace('定期定額','').trim()]=h.name});const nameOf=c=>nm[c]||'';
   const hcC=['#4285f4','#ea4335','#fbbc04','#34a853','#b388ff','#ff8a65'],hcS=[...D.holdings.filter(h=>h.value>0).reduce((m,h)=>{const n=h.code.replace('定期定額','').trim();m.set(n,(m.get(n)||0)+h.value);return m},new Map())].map(([n,v])=>({n,v})).sort((x,y)=>y.v-x.v),hcT=hcS.reduce((a,b)=>a+b.v,0);let hcA=0;
@@ -390,12 +391,12 @@ function renderCtx(){const e=$('#ctx');if(!e)return;let h='';
   else if(mode==='s'){const c=$('#sC').value.trim().split(' ')[0];
     if(c.length<2)h='<small>輸入代號，這裡會顯示庫存</small>';
     else{const dca=sk==='定期定額',base=x=>x.code.replace('定期定額','').trim(),hs=(D&&D.holdings)||[],hd=hs.find(x=>base(x)===c&&x.code.includes('定期定額')===dca),nm=(hs.find(x=>base(x)===c&&x.name)||{}).name||'';
-      h=`<b>${esc(nm||c)}</b> `+(hd?`庫存 ${hd.qty.toLocaleString()} 股 <small>· 均價 ${IH((hd.cost/hd.qty).toFixed(2))} · 損益</small> <span class="${ih?'':hd.gain>=0?'up':'down'}">${IH(hd.gainPct)}</span>`:`<small>目前沒有${dca?'定期定額':'現股'}庫存</small>`);
+      h=`<b>${esc(nm||c)}</b> `+(hd?`庫存 ${hd.qty.toLocaleString()} 股 <small>· 均價 ${IH((hd.avg!=null?Number(hd.avg):hd.cost/hd.qty).toFixed(2))} · 損益</small> <span class="${ih?'':hd.gain>=0?'up':'down'}">${IH(hd.gainPct)}</span>`:`<small>目前沒有${dca?'定期定額':'現股'}庫存</small>`);
       if(sk==='賣出'&&qty()>(hd?hd.qty:0))h+=' <span class="warn">⚠ 超過庫存</span>'}}
   else{const g=((R&&R.mahjong)||[]).slice(0,5);
     if(!g.length)h='<small>還沒有麻將記錄</small>';
     else{const w=g.filter(x=>x.result==='贏').length,net=g.reduce((p,x)=>p+(x.result==='贏'?x.amount:-x.amount),0);
-      h=`近 ${g.length} 場 <span class="dots">${g.slice().reverse().map(x=>`<i class="${x.result==='贏'?'w':'l'}"></i>`).join('')}</span> <b>${w} 勝 ${g.length-w} 敗</b> <small>· 勝率 ${Math.round(w/g.length*100)}% · ${net>=0?'贏':'輸'}</small> <b class="${hid?'':net>=0?'up':'down'}">${H(Math.abs(net).toLocaleString())}</b>`}}
+      h=`近 ${g.length} 場 <span class="dots">${g.slice().reverse().map(x=>`<i class="${x.result==='贏'?'w':'l'}"></i>`).join('')}</span> <b>${w} 勝 ${g.length-w} 敗</b> <small>· 勝率 ${Math.round(w/g.length*100)}% · ${net>=0?'贏':'輸'}</small> <b class="${net>=0?'up':'down'}">${Math.abs(net).toLocaleString()}</b>`}}
   e.innerHTML=h}
 function drawCats(){$('#cats').innerHTML=CATS[kind].map(c=>`<button class="chip${c===cat?' on':''}" data-c="${c}">${icon(c)} ${c}</button>`).join('')}
 function setKind(k){if(ed&&ed.orig.length===2&&k!=='轉帳')return toast('一般記錄和轉帳不能互相切換，請回 Sheet 修改');kind=k;cat='';$$('#kind button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));$('#acc2').style.display=k==='轉帳'?'':'none';drawCats();updGo();render()}
