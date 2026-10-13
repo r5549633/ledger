@@ -103,6 +103,8 @@ nav button{flex:1;border:0;background:none;color:var(--sub);font:inherit;font-si
 .ubar{width:140px;max-width:40vw;height:5px;border-radius:3px;background:var(--soft);margin-top:5px;overflow:hidden}.ubar i{display:block;height:100%}
 #mjC .r small{display:block;color:var(--sub);font-size:12px;margin-top:2px}.mon .m3{margin-top:6px}
 .dots{display:inline-flex;gap:3px;vertical-align:middle}.dots i{width:9px;height:9px;border-radius:50%}.dots .w{background:var(--up)}.dots .l{background:var(--down)}
+.dr .seg.mini{flex:0 0 auto;margin:0;padding:3px}.dr .seg.mini button{flex:0 0 auto;padding:7px 11px;font-size:14px}
+.amt.sa{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15}.amt.sa small{font-size:12px;font-weight:500;color:var(--sub)}.amt.sa b{font-size:30px;white-space:nowrap}.dr input{flex-basis:132px!important}
 </style></head><body><div id="app"><main>
 
 <section class="tab on" id="t-home">
@@ -142,8 +144,7 @@ nav button{flex:1;border:0;background:none;color:var(--sub);font:inherit;font-si
 </div>
 <div class="pnl" id="p-s">
 <div class="seg" id="sk"><button data-k="買進" class="on">買進</button><button data-k="賣出">賣出</button><button data-k="定期定額">定期定額</button></div>
-<div class="seg mini" id="sm"><button data-k="現股" class="on">現股</button><button data-k="當沖">當沖</button></div>
-<div class="dr"><input type="date" id="sD"><div class="amt"><span id="sTl">預估應付</span> <b id="sTot">0</b></div></div>
+<div class="dr"><input type="date" id="sD"><div class="seg mini" id="sm"><button data-k="現股" class="on">現</button><button data-k="當沖">沖</button></div><div class="amt sa"><small id="sTl">預估應付</small><b id="sTot">0</b></div></div>
 <div id="sFee"></div>
 <div class="f"><input id="sC" type="text" name="stock-code-x" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="股票代號（輸入，或點下方持股）"></div><div class="chips" id="codes"></div>
 <div class="tiles" id="tiles"><div class="tile on" data-f="q"><small>股數 <button class="unit" id="su" type="button">股</button></small><b id="sQv">0</b><small id="sQh"></small></div><div class="tile" data-f="p"><small>成交均價</small><b id="sPv">0</b><small></small></div></div>
@@ -326,7 +327,7 @@ function render(){hideSplash();
   const hcC=['#4285f4','#ea4335','#fbbc04','#34a853','#b388ff','#ff8a65'],hcS=[...D.holdings.filter(h=>h.value>0).reduce((m,h)=>{const n=h.code.replace('定期定額','').trim();m.set(n,(m.get(n)||0)+h.value);return m},new Map())].map(([n,v])=>({n,v})).sort((x,y)=>y.v-x.v),hcT=hcS.reduce((a,b)=>a+b.v,0);let hcA=0;
   const hcStops=hcS.map((x,i)=>{const f=hcA/hcT*100;hcA+=x.v;return`${hcC[i%6]} ${f}% ${hcA/hcT*100}%`}).join(',');
   $('#hchart').innerHTML=ih?'<div class="empty" style="font-size:15px">******</div>':!hcS.length?'<div class="empty">沒有持股</div>':`<div class="hch"><div class="donut" style="background:conic-gradient(${hcStops})"></div><div class="hlg">${hcS.map((x,i)=>`<div class="row"><div class="l"><i class="dot" style="background:${hcC[i%6]}"></i><div>${nameOf(x.n)||x.n}${nameOf(x.n)?`<small>${x.n}</small>`:''}</div></div><b>${(x.v/hcT*100).toFixed(2)}%</b></div>`).join('')}</div></div>`;
-  $('#codes').innerHTML=[...new Set(D.holdings.map(h=>h.code.replace('定期定額','').trim()))].map(c=>`<button class="chip" data-sc="${c}">${c}${nameOf(c)?' '+esc(nameOf(c)):''}</button>`).join('');
+  $('#codes').innerHTML=[...new Set(D.holdings.map(h=>h.code.replace('定期定額','').trim()))].map(c=>`<button class="chip" data-sc="${c}">${c}</button>`).join('');
   $('#in1').textContent=ih?'******':S(s,'已投入資金').value.toLocaleString()+'（'+S(s,'已投入資金%').text+'）';$('#inb').style.width=ih?0:S(s,'已投入資金%').value*100+'%';
   $('#in2').textContent=ih?'******':S(s,'未投入資金').value.toLocaleString()+'（'+S(s,'未投入資金%').text+'）';$('#in3').textContent=IH(S(s,'可投入資金').value.toLocaleString());
   ['acc','acc2'].forEach((id,i)=>{const e=$('#'+id),v=e.value;e.innerHTML='<option value="">'+(i?'轉入帳戶':kind==='轉帳'?'轉出帳戶':'帳戶')+'</option>'+D.accounts.map(a=>`<option style="color:${col[a.type]}">${a.name}</option>`).join('');e.value=v;colorSel(e)});
@@ -365,17 +366,17 @@ async function send(btn,action,payload,after){
     if(isAdd&&e.uncertain){Q.push({id,action,payload,t:Date.now()});saveQ();after&&after(null);render();toast('連不上伺服器，已暫存在手機，連線後會自動補送',4500)}
     else toast(e.uncertain?'沒有收到確認，資料可能已經修改。請先按「同步」確認最近記錄，再決定要不要重送':'失敗：'+e.message,6000)}
   finally{busy=false;btn.disabled=false;if(ok&&btn.classList.contains('go')){btn.classList.add('ok');btn.textContent=dn||'✓ 完成';try{navigator.vibrate&&navigator.vibrate(15)}catch(e){}setTimeout(()=>{btn.classList.remove('ok');btn.textContent=btn.dataset.l||t},1300)}else btn.textContent=btn.dataset.l||t}}
-const ICON={飲食:'🍜',購物:'🛍️',住家:'🏠',交通:'🚗',學習:'📚',娛樂:'🎮',健康:'💊',金融:'🏦',保險:'🛡️',送禮:'🎁',稅金:'🧾',其他:'📦',主動收入:'💼',被動收入:'🌱',意外收入:'🍀',存款:'🐷',投資:'📈',繳卡費:'💳',手續費:'🪙',其餘分類:'🗂️'};
-const icon=c=>ICON[c]||'📌',STI={定期定額:'🐢',現股買入:'📈',現股沖買:'⚡',現股賣出:'💵',現股沖賣:'⚡',股票申購:'🎟️'};
+const ICON={飲食:'🍜',購物:'🛍️',住家:'🏠',交通:'🚗',學習:'📚',娛樂:'🎮',健康:'💊',金融:'🏦',保險:'🛡️',送禮:'🎁',稅金:'🧾',其他:'📦',主動收入:'💼',被動收入:'🌱',意外收入:'🍀',存款:'🫙',投資:'📈',繳卡費:'💳',手續費:'🪙',其餘分類:'🗂️'};
+const icon=c=>ICON[c]||'📌',STI={定期定額:'🐿️',現股買入:'📈',現股沖買:'⚡',現股賣出:'💵',現股沖賣:'⚡',股票申購:'🎟️'};
 const rowL=(ic,t,s)=>`<div class="l"><span class="ic">${ic}</span><div>${t}<small>${s}</small></div></div>`;
-const GOL={支出:'💸 花出去了',收入:'💰 入袋為安',轉帳:'🔁 轉過去',買進:'📈 買進成交',賣出:'💵 賣出成交',定期定額:'🐢 定期定額存一筆',贏:'🀄 胡了！記下來',輸:'🫠 繳學費了'};
+const GOL={支出:'💸 花出去了',收入:'💰 入袋為安',轉帳:'🔁 轉過去',買進:'📈 買進成交',賣出:'💵 賣出成交',定期定額:'🐿️ 定期定額存一筆',贏:'🀄 胡了！記下來',輸:'🫠 繳學費了'};
 const GOD={支出:'✓ 記好了',收入:'✓ 記好了',轉帳:'✓ 轉好了',買進:'✓ 送出囉',賣出:'✓ 送出囉',定期定額:'✓ 又存了一筆',贏:'✓ 恭喜發財',輸:'✓ 下次贏回來'};
 let mode='e',lmode='e',sk='買進',smd='現股',su='股',sf='q',sq='',sp='',ma='';
 function setL(id,l,d){const b=$('#'+id);b.dataset.l=l;b.dataset.done=d;if(!b.disabled&&!b.classList.contains('ok'))b.textContent=l}
 function updGo(){setL('go',ed?'✏️ 儲存修改':GOL[kind],ed?'✓ 已修改':GOD[kind]);setL('sGo',GOL[sk],GOD[sk]);setL('mGo',edm?'✏️ 儲存修改':GOL[mres],edm?'✓ 已修改':GOD[mres]);
   ['go','sGo','mGo'].forEach((id,i)=>$('#'+id).style.display='esm'[i]===mode?'':'none')}
 function goTab(t){$$('nav button').forEach(x=>x.classList.toggle('on',x.dataset.t===t));$$('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+t));$('main').scrollTop=0}
-function setMode(m){mode=m;$$('#mode button').forEach(b=>b.classList.toggle('on',b.dataset.k===m));$$('.pnl').forEach(p=>p.classList.toggle('on',p.id==='p-'+m));drawPad();updGo();renderCtx()}
+function setMode(m){mode=m;$$('#mode button').forEach(b=>b.classList.toggle('on',b.dataset.k===m));$$('.pnl').forEach(p=>p.classList.toggle('on',p.id==='p-'+m));drawPad();updGo();updNum()}
 function setLM(m){lmode=m;$$('#lmode button').forEach(b=>b.classList.toggle('on',b.dataset.k===m));$$('.lp').forEach(p=>p.classList.toggle('on',p.id==='l-'+m))}
 $('#mode').onclick=e=>{const b=e.target.closest('[data-k]');if(b)setMode(b.dataset.k)};
 $('#lmode').onclick=e=>{const b=e.target.closest('[data-k]');if(b)setLM(b.dataset.k)};
@@ -413,13 +414,14 @@ function updNum(){$('#av').textContent=amt?Number(amt).toLocaleString():'0';$('#
   $('#sQv').textContent=sq?Number(sq).toLocaleString():'0';$('#su').textContent=su;$('#sQh').textContent=su==='張'&&sq?'＝ '+qty().toLocaleString()+' 股':'';
   $('#sPv').textContent=sp||'0';calc();renderCtx()}
 // 股票：預估金額算法與 Sheet 相同（手續費 0.1425% × 2.8 折、定期定額 1 元；ETF 稅 0.1%、股票 0.3%、當沖 0.15%）
+function fitTot(){const o=$('#sTot'),w=o.parentElement.clientWidth;let z=30;o.style.fontSize=z+'px';while(w&&o.offsetWidth>w&&z>16){z-=2;o.style.fontSize=z+'px'}}
 function calc(){const t=stype(),c=$('#sC').value.trim().split(' ')[0],q=qty(),p=Number(sp)||0,sell=sk==='賣出',o=$('#sTot'),f=$('#sFee');
   $('#sTl').textContent=sell?'預估實收':'預估應付';o.className=TPC[t]||'';
-  if(c.length<2||!(q>0)||!(p>0)){o.textContent='0';f.textContent='';return}
+  if(c.length<2||!(q>0)||!(p>0)){o.textContent='0';f.textContent='';fitTot();return}
   const etf=c.startsWith('00'),b=Math.floor(q*p),fee=t==='定期定額'?1:Math.floor(b*0.001425*0.28),tax=sell?Math.floor(b*(etf?0.001:smd==='當沖'?0.0015:0.003)):0;
-  o.textContent=(sell?b-fee-tax:b+fee).toLocaleString();
+  o.textContent=(sell?b-fee-tax:b+fee).toLocaleString();fitTot();
   f.textContent=sell?`成交 ${b.toLocaleString()} − 手續費 ${fee} − 交易稅 ${tax.toLocaleString()}`:`成交 ${b.toLocaleString()} ＋ 手續費 ${fee}`}
-$('#sk').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;sk=b.dataset.k;$$('#sk button').forEach(x=>x.classList.toggle('on',x===b));$('#sm').style.display=sk==='定期定額'?'none':'';updGo();updNum()};
+$('#sk').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;sk=b.dataset.k;$$('#sk button').forEach(x=>x.classList.toggle('on',x===b));$('#sm').style.visibility=sk==='定期定額'?'hidden':'';updGo();updNum()};
 $('#sm').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;smd=b.dataset.k;$$('#sm button').forEach(x=>x.classList.toggle('on',x===b));updNum()};
 $('#tiles').onclick=e=>{if(e.target.id==='su'){const q=qty();su=su==='股'?'張':'股';sq=q?String(su==='張'?q/1000:q):'';updNum();return}
   const t=e.target.closest('[data-f]');if(!t)return;sf=t.dataset.f;$$('.tile').forEach(x=>x.classList.toggle('on',x===t));drawPad()};
