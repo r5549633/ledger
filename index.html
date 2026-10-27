@@ -442,7 +442,8 @@ $('#sGo').onclick=function(){
   const rec={date:$('#sD').value,stock:c,type:stype(),quantity:String(q),price:String(p)};
   send(this,'addStock',rec,d=>{
     try{const a=JSON.parse(st.get('stk')||'[]');a.unshift(rec);st.set('stk',JSON.stringify(a.slice(0,5)))}catch(e){}
-    const o=d&&d.offset;if(o&&o.status==='error')toast('已記錄，但沖銷異常：'+o.errors.join('、'),6000);else if(o&&o.status==='done')toast('已自動沖銷');
+    const o=d&&d.offset,tr=d&&d.transfer;if(o&&o.status==='error')toast('已記錄，但沖銷異常：'+o.errors.join('、'),6000);else if(o&&o.status==='done')toast('已自動沖銷');
+    else if(tr&&tr.status==='done')toast(`🔁 已同時記一筆投資轉帳：${tr.from} ➜ ${tr.to} ${Number(tr.amount).toLocaleString()}`,3500);else if(tr&&tr.status!=='done')toast('股票已記錄，但投資轉帳沒有自動記：'+tr.message+'，請到「記一筆」手動補',6000);
     setLast(`${STI[rec.type]} ${c} ${rec.type} ${q.toLocaleString()} 股 @ ${p}`,d);
     sq='';sp='';$('#sC').value='';sf='q';$$('.tile').forEach(x=>x.classList.toggle('on',x.dataset.f==='q'));drawPad();updNum()})};
 $('#mk').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;mres=b.dataset.k;$$('#mk button').forEach(x=>x.classList.toggle('on',x===b));updGo()};
