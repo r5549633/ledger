@@ -424,7 +424,7 @@ function stockRecent(){
 /* 信用卡畫成實體卡片（可以左右滑），每張輪流用不同的卡面顏色；手指／滑鼠在卡上移動會跟著傾斜 */
 const CCG=[['#232526','#5b6a8f'],['#0f5f5a','#21b39b'],['#7a2e14','#e07a3a'],['#3d1a6e','#9b5de5'],['#123a7a','#3aa0e8']];
 // 帳戶名稱裡有這些字就套用對應卡面，對不到的用上面的輪流漸層
-const CCT=[[/iLEO|第一/i,'ileo'],[/中華電信|中信|中國信託/,'cht'],[/CUBE|國泰/i,'cube'],[/eco|星展|DBS/i,'eco'],[/Costco|好市多|富邦/i,'costco'],[/GoGo|台新/i,'gogo']];
+const CCT=[[/iLEO|第一|一銀/i,'ileo'],[/中華電信|中信|中國信託/,'cht'],[/CUBE|國泰/i,'cube'],[/eco|星展|DBS/i,'eco'],[/Costco|好市多|富邦/i,'costco'],[/GoGo|台新/i,'gogo']];
 function ccard(a,i){const u=a.limit>0?Math.min(100,Math.max(0,-a.balance)/a.limit*100):-1,[c1,c2]=CCG[i%CCG.length],th=(CCT.find(([re])=>re.test(a.name))||[])[1];
   return`<div class="cc${th?' t-'+th:''}" data-a="${esc(a.name)}" style="--c1:${c1};--c2:${c2}"><div class="cct"><b>${esc(a.name)}</b><i class="cchip"></i></div>
   <div class="ccm"><small>目前餘額</small>${HP(fmt(a.balance))}</div>
