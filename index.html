@@ -157,7 +157,7 @@ body{background:radial-gradient(900px 500px at -10% -5%,rgba(46,230,196,.10),tra
 .row.drag>*,.row.drag .ract{transition:none!important}
 .ract{position:absolute;right:0;top:5px;bottom:5px;display:flex;justify-content:flex-end;gap:6px;width:calc(var(--sx,0px) * -1);overflow:hidden;transition:width .25s ease}
 .ract button{flex:0 0 60px;border:0;border-radius:10px;font:inherit;font-size:13px;font-weight:700;color:#fff}.ract [data-act=ed]{background:linear-gradient(135deg,#8fa9e6,#6f5bff)}.ract [data-act=del]{background:linear-gradient(135deg,#ff6b61,#e2477a)}
-.dh .we{color:#ffb74d}.dh small{font-weight:400;margin-left:4px}
+.dh .we{color:var(--up)}.dh small{font-weight:400;margin-left:4px}
 #mbar{margin-bottom:12px}#mbar:empty{display:none}.mbh{display:flex;justify-content:space-between;font-size:13px;color:var(--sub);margin-bottom:6px}.mbh .pv{color:var(--ink);font-weight:700}
 .mbr{display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px;cursor:pointer}.mbr i{display:block;min-width:4px;animation:grow .7s ease-out}@keyframes grow{from{flex-grow:0}}
 .mbl{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:8px;font-size:12px;color:var(--sub)}.mbl span{cursor:pointer;display:inline-flex;align-items:center;gap:4px}.mbl i{width:8px;height:8px;border-radius:50%}.mbl b{color:var(--ink);font-weight:600}
@@ -170,8 +170,15 @@ body{background:radial-gradient(900px 500px at -10% -5%,rgba(46,230,196,.10),tra
 #p-m #mk{background:none;gap:18px;justify-content:center;padding:2px 0 14px}
 #p-m #mk button,#p-m #mk .on[data-k]{flex:0 0 74px;height:96px;padding:0;border-radius:10px;font-size:40px;font-weight:700;background:linear-gradient(180deg,#fffdf5,#ece3c8 88%);box-shadow:0 6px 0 #2f8f5b,0 8px 12px rgba(0,0,0,.35);transition:transform .15s,box-shadow .15s}
 #p-m #mk [data-k="贏"]{color:#d4352c!important}#p-m #mk [data-k="輸"]{color:#168a58!important}
-#p-m #mk .on{transform:translateY(-6px);box-shadow:0 6px 0 #2f8f5b,0 14px 22px rgba(0,0,0,.45),0 0 0 3px #ffd54f}
+#p-m #mk button:not(.on){opacity:.45;filter:grayscale(.6);transform:scale(.9)}
+#p-m #mk .on{transform:translateY(-10px) scale(1.12);box-shadow:0 6px 0 #2f8f5b,0 18px 26px rgba(0,0,0,.5),0 0 0 4px #ffd54f,0 0 28px 6px rgba(255,213,79,.55);animation:tileOn .35s ease-out}
+@keyframes tileOn{0%{transform:translateY(0) scale(.95)}60%{transform:translateY(-14px) scale(1.18)}100%{transform:translateY(-10px) scale(1.12)}}
+#p-m[data-k="贏"] #mk .on{box-shadow:0 6px 0 #2f8f5b,0 18px 26px rgba(0,0,0,.5),0 0 0 4px #ff6b61,0 0 30px 8px rgba(255,107,97,.6)}
+#p-m[data-k="輸"] #mk .on{box-shadow:0 6px 0 #2f8f5b,0 18px 26px rgba(0,0,0,.5),0 0 0 4px #3fcf8e,0 0 30px 8px rgba(63,207,142,.6)}
+#p-m #mk{padding-top:12px}
 .mt{display:inline-flex;align-items:center;justify-content:center;width:18px;height:24px;margin-right:2px;border-radius:4px;font-size:11px;font-weight:700;font-style:normal;vertical-align:middle;background:linear-gradient(180deg,#fffdf5,#e9e2cc);box-shadow:0 2px 0 #2f8f5b}.mt.w{color:#d4352c}.mt.l{color:#168a58}
+/* 帳戶和備註同一行各半；轉帳時轉出／轉入帳戶在上面一行，備註換到下一行整排 */
+.f.an{display:grid;grid-template-columns:1fr 1fr}#p-e[data-k="轉帳"] #note{grid-column:1/-1}
 /* 常用組合、再記一筆 */
 .combos{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 0 10px;align-items:center}.combos::-webkit-scrollbar{display:none}.combos:empty{display:none}
 .combos .cl{flex:0 0 auto;font-size:12px;color:var(--sub)}
@@ -259,8 +266,7 @@ body{background:radial-gradient(900px 500px at -10% -5%,rgba(46,230,196,.10),tra
 <div class="seg" id="kind"><button data-k="支出" class="on">支出</button><button data-k="收入">收入</button><button data-k="轉帳">轉帳</button></div>
 <div class="dr"><input type="date" id="date"><div class="amt"><small class="ax" id="aX"></small><span>NT$</span> <b id="av">0</b></div></div>
 <div class="chips" id="cats"></div>
-<div class="f"><select id="acc"></select><select id="acc2" style="display:none"></select></div>
-<div class="f"><input id="note" placeholder="備註（選填）"></div><div class="chips" id="nchips"></div>
+<div class="f an"><select id="acc"></select><select id="acc2" style="display:none"></select><input id="note" placeholder="備註（選填）"></div><div class="chips" id="nchips"></div>
 <details><summary>更多選項（專案、手續費、外幣）</summary>
 <div class="f"><select id="proj"><option value="">專案</option><option>家庭開銷</option><option>出國旅遊</option></select><input type="number" id="fee" placeholder="手續費"></div>
 <div class="f"><select id="cur"><option value="">幣別</option><option value="JPY">¥ 日幣</option><option value="KRW">₩ 韓幣</option><option value="USD">$ 美金</option><option value="CNY">¥ 人民幣</option><option value="EUR">€ 歐元</option><option value="HKD">HK$ 港幣</option></select><input type="number" id="fa" placeholder="外幣金額"></div></details>
@@ -289,7 +295,7 @@ body{background:radial-gradient(900px 500px at -10% -5%,rgba(46,230,196,.10),tra
 <div class="lp" id="l-s"><div class="srch"><input id="qs" type="search" enterkeyhint="search" placeholder="搜尋代號、名稱、日期…"><button class="ico" data-s="s">搜尋</button></div><div id="stkL"></div></div>
 <div class="lp" id="l-m"><div class="srch"><input id="qm" type="search" enterkeyhint="search" placeholder="搜尋日期、輸贏、金額…"><button class="ico" data-s="m">搜尋</button></div><div id="mjL"></div></div>
 </div>
-<p class="hint">日常、麻將的記錄：點一下或往左滑可以修改、刪除；股票請回 Sheet 修改</p>
+<p class="hint">日常、麻將的記錄：往左滑（或點一下）出現修改、刪除；股票請回 Sheet 修改</p>
 </section>
 </main>
 <nav id="nav"><i id="npill"></i><button class="on" data-t="home"><b>🏠</b>總覽</button><button data-t="inv"><b>📈</b>投資</button><button data-t="rec"><b>✏️</b>記一筆</button><button data-t="list"><b>🧾</b>明細</button></nav>
@@ -671,7 +677,7 @@ function drawCombos(){const e=$('#combos');if(ed){e.innerHTML='';return}const al
   ((R&&R.expenses)||[]).filter(x=>x.type!=='轉帳'&&!TRANSFER_C.includes(x.category)).forEach(x=>{const k=JSON.stringify([x.type,x.category,x.account,'',String(x.note||'').trim()]);all[k]=all[k]||{n:0,t:0};all[k].n++});
   Object.entries(CB).forEach(([k,v])=>{all[k]={n:Math.max(v.n,(all[k]||{}).n||0),t:v.t}});
   const top=Object.entries(all).filter(([,v])=>v.n>=2).sort((a,b)=>b[1].n-a[1].n||b[1].t-a[1].t).slice(0,3);
-  e.innerHTML=top.length?'<span class="cl">⚡ 常用</span>'+top.map(([k])=>{const[ty,c,a,,n]=JSON.parse(k);return`<button class="cmb" data-ck="${esc(k)}">${icon(c)} ${esc(c)}<small>${esc(a)}${n?' · '+esc(n):''}</small></button>`}).join(''):''}
+  e.innerHTML=top.map(([k])=>{const[ty,c,a,,n]=JSON.parse(k);return`<button class="cmb" data-ck="${esc(k)}">${icon(c)} ${esc(c)}<small>${esc(a)}${n?' · '+esc(n):''}</small></button>`}).join('')}
 const TRANSFER_C=CATS.轉帳;
 $('#combos').onclick=e=>{const b=e.target.closest('[data-ck]');if(!b)return;const[ty,c,a,a2,n]=JSON.parse(b.dataset.ck);
   if(kind!==ty)setKind(ty);cat=c;drawCats();$('#acc').value=a;$('#acc2').value=a2||'';colorSel($('#acc'));colorSel($('#acc2'));accTouched=true;$('#note').value=n||'';renderCtx();bump('#av')};
@@ -816,9 +822,9 @@ document.addEventListener('click',e=>{
   const mb=e.target.closest('[data-more]');if(mb){moreList(mb.dataset.more);return}
   const q=e.target.closest('[data-q]');if(q){const qid=q.dataset.q;ask('⏳ 這筆還在等補送','它還存在手機裡、沒有送出去。要把它丟掉嗎？','丟掉','留著').then(ok=>{if(ok){Q=Q.filter(x=>x.id!==qid);saveQ();render()}});return}
   const ab=e.target.closest('.ract [data-act]');if(ab){rowAct(ab);return}
-  const rw=e.target.closest('#rec .row[data-e],#mjL .row[data-m]');if(rw&&Date.now()-(rw._sw||0)<400)return;if(rw&&rw.classList.contains('open')){closeRow(rw);return}
-  const x=e.target.closest('[data-e]');if(x&&EL[+x.dataset.e]){startEdit(EL[+x.dataset.e]);return}
-  const y=e.target.closest('[data-m]');if(y&&ML[+y.dataset.m])startEditMj(ML[+y.dataset.m])});
+  // 點一筆記錄不會跳去修改，只會打開／收起「修改、刪除」按鈕（跟往左滑一樣）
+  const rw=e.target.closest('#rec .row[data-e],#mjL .row[data-m]');if(!rw||Date.now()-(rw._sw||0)<400)return;
+  if(rw.classList.contains('open'))closeRow(rw);else{if(openRow)closeRow(openRow);rw.style.setProperty('--sx','-132px');rw.classList.add('open');openRow=rw}});
 /* ===== 月報表（後端算好，這裡只顯示；轉帳的存款、繳卡費不算，投資算支出） ===== */
 const shiftMonth=(m,n)=>{let y=+m.slice(0,4),k=+m.slice(5)-1+n;y+=Math.floor(k/12);k=((k%12)+12)%12;return y+'-'+String(k+1).padStart(2,'0')};
 async function loadMonthly(){
