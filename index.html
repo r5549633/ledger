@@ -128,6 +128,7 @@ main{overflow-x:hidden}.tab.sl{animation:sl .22s ease-out}.tab.sr{animation:sr .
 nav{position:relative;background:linear-gradient(180deg,color-mix(in srgb,var(--card) 80%,transparent),var(--card));border-top:1px solid rgba(255,255,255,.06)}
 nav button{position:relative;z-index:1}nav .on{color:#fff}
 #npill{position:absolute;top:5px;bottom:7px;left:calc(var(--i,0) * 25% + 14px);width:calc(25% - 28px);border-radius:16px;background:linear-gradient(135deg,rgba(46,230,196,.22),rgba(91,63,232,.34));box-shadow:0 0 18px rgba(91,63,232,.35),inset 0 0 0 1px rgba(255,255,255,.08);transition:left .35s cubic-bezier(.3,1.3,.5,1)}
+nav{touch-action:none}nav.drag #npill{transition:none;box-shadow:0 0 26px rgba(91,63,232,.55),inset 0 0 0 1px rgba(255,255,255,.14)}
 /* 更多漸層：背景微光、卡片、按鈕、選取中的選項 */
 body{background:radial-gradient(900px 500px at -10% -5%,rgba(46,230,196,.10),transparent 60%),radial-gradient(800px 600px at 110% 0%,rgba(91,63,232,.14),transparent 60%),radial-gradient(700px 500px at 50% 110%,rgba(10,124,192,.10),transparent 60%),var(--bg) fixed}
 .card{background:linear-gradient(160deg,rgba(143,169,230,.07),rgba(143,169,230,0) 55%),var(--card);border:1px solid rgba(255,255,255,.05)}
@@ -137,6 +138,46 @@ body{background:radial-gradient(900px 500px at -10% -5%,rgba(46,230,196,.10),tra
 #kind .on[data-k="收入"],#mk .on[data-k="贏"],#sk .on[data-k="買進"]{background:linear-gradient(135deg,#ff6b61,#e2477a)}
 #kind .on[data-k="支出"],#mk .on[data-k="輸"],#sk .on[data-k="賣出"]{background:linear-gradient(135deg,#3fcf8e,#169c9c)}
 #kind .on[data-k="轉帳"]{background:linear-gradient(135deg,#b388ff,#6f5bff)}#sk .on[data-k="定期定額"]{background:linear-gradient(135deg,#40c4ff,#0277bd)}
+/* 記一筆：日期＋金額放進一張漸層卡片，顏色跟著支出（綠）／收入（紅）／轉帳（紫）、贏輸、買賣變 */
+.pnl .dr{padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:linear-gradient(135deg,rgba(63,207,142,.26),rgba(22,156,156,.10) 60%,transparent),var(--card)}
+#p-e[data-k="收入"] .dr,#p-m .dr,#p-s .dr{background:linear-gradient(135deg,rgba(255,107,97,.28),rgba(226,71,122,.10) 60%,transparent),var(--card)}
+#p-e[data-k="轉帳"] .dr{background:linear-gradient(135deg,rgba(179,136,255,.30),rgba(111,91,255,.10) 60%,transparent),var(--card)}
+#p-m[data-k="輸"] .dr,#p-s[data-k="賣出"] .dr{background:linear-gradient(135deg,rgba(63,207,142,.26),rgba(22,156,156,.10) 60%,transparent),var(--card)}
+#p-s[data-k="定期定額"] .dr{background:linear-gradient(135deg,rgba(64,196,255,.26),rgba(2,119,189,.10) 60%,transparent),var(--card)}
+.pnl .dr input{background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.08)}
+#p-e[data-k="支出"] #av,#p-m[data-k="輸"] #mAv{color:#9ff0c8}#p-e[data-k="收入"] #av,#p-m[data-k="贏"] #mAv{color:#ffb3ad}#p-e[data-k="轉帳"] #av{color:#d7c2ff}
+#av,#mAv,#sQv,#sPv{display:inline-block}.bump{animation:bump .18s ease-out}@keyframes bump{40%{transform:scale(1.12)}}
+.pad button{position:relative;overflow:hidden;transition:background .15s,color .15s}.rp{position:absolute;border-radius:50%;background:rgba(255,255,255,.22);transform:scale(0);animation:rp .45s ease-out forwards;pointer-events:none}@keyframes rp{to{transform:scale(2.4);opacity:0}}
+.pad .act{background:linear-gradient(135deg,#8fa9e6,#7b6cf0)!important;color:#fff!important}
+/* 明細：分類色、友善日期、本月長條、搜尋、左滑、空狀態 */
+.ic[style]{background:linear-gradient(135deg,color-mix(in srgb,var(--cc) 45%,transparent),color-mix(in srgb,var(--cc) 12%,transparent))}
+#rec .row[data-e],#mjL .row[data-m]{position:relative;touch-action:pan-y}
+#rec .row[data-e]::after,#mjL .row[data-m]::after{content:"";position:absolute;right:-9px;top:14px;bottom:14px;width:3px;border-radius:2px;background:var(--cc)}
+#rec .row>:not(.ract),#mjL .row>:not(.ract){transform:translateX(var(--sx,0px));transition:transform .25s ease}
+.row.drag>*,.row.drag .ract{transition:none!important}
+.ract{position:absolute;right:0;top:5px;bottom:5px;display:flex;justify-content:flex-end;gap:6px;width:calc(var(--sx,0px) * -1);overflow:hidden;transition:width .25s ease}
+.ract button{flex:0 0 60px;border:0;border-radius:10px;font:inherit;font-size:13px;font-weight:700;color:#fff}.ract [data-act=ed]{background:linear-gradient(135deg,#8fa9e6,#6f5bff)}.ract [data-act=del]{background:linear-gradient(135deg,#ff6b61,#e2477a)}
+.dh .we{color:#ffb74d}.dh small{font-weight:400;margin-left:4px}
+#mbar{margin-bottom:12px}#mbar:empty{display:none}.mbh{display:flex;justify-content:space-between;font-size:13px;color:var(--sub);margin-bottom:6px}.mbh .pv{color:var(--ink);font-weight:700}
+.mbr{display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px;cursor:pointer}.mbr i{display:block;min-width:4px;animation:grow .7s ease-out}@keyframes grow{from{flex-grow:0}}
+.mbl{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:8px;font-size:12px;color:var(--sub)}.mbl span{cursor:pointer;display:inline-flex;align-items:center;gap:4px}.mbl i{width:8px;height:8px;border-radius:50%}.mbl b{color:var(--ink);font-weight:600}
+.srch input{border:1px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,#2ee6c4,#0a7cc0 45%,#5b3fe8) border-box}
+.qf{margin:-2px 0 12px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.qf::-webkit-scrollbar{display:none}.qf .chip{flex:0 0 auto;font-size:12px;padding:5px 11px}
+.empty.ill{padding:26px 0 18px;font-size:14px}.empty.ill .em{font-size:46px;margin-bottom:8px;animation:float 3s ease-in-out infinite}@keyframes float{50%{transform:translateY(-6px)}}
+/* 麻將：綠色牌桌＋象牙色麻將牌按鈕 */
+#p-m{background:repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0 2px,transparent 2px 6px),radial-gradient(circle at 30% 0%,#2a7a52,#13432d 75%);border-radius:18px;padding:16px 14px 12px;margin-bottom:12px;box-shadow:inset 0 0 30px rgba(0,0,0,.35)}
+#p-m .dr,#p-m[data-k="輸"] .dr{background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.08)}
+#p-m #mk{background:none;gap:18px;justify-content:center;padding:2px 0 14px}
+#p-m #mk button,#p-m #mk .on[data-k]{flex:0 0 74px;height:96px;padding:0;border-radius:10px;font-size:40px;font-weight:700;background:linear-gradient(180deg,#fffdf5,#ece3c8 88%);box-shadow:0 6px 0 #2f8f5b,0 8px 12px rgba(0,0,0,.35);transition:transform .15s,box-shadow .15s}
+#p-m #mk [data-k="贏"]{color:#d4352c!important}#p-m #mk [data-k="輸"]{color:#168a58!important}
+#p-m #mk .on{transform:translateY(-6px);box-shadow:0 6px 0 #2f8f5b,0 14px 22px rgba(0,0,0,.45),0 0 0 3px #ffd54f}
+.mt{display:inline-flex;align-items:center;justify-content:center;width:18px;height:24px;margin-right:2px;border-radius:4px;font-size:11px;font-weight:700;font-style:normal;vertical-align:middle;background:linear-gradient(180deg,#fffdf5,#e9e2cc);box-shadow:0 2px 0 #2f8f5b}.mt.w{color:#d4352c}.mt.l{color:#168a58}
+/* 常用組合、再記一筆 */
+.combos{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 0 10px;align-items:center}.combos::-webkit-scrollbar{display:none}.combos:empty{display:none}
+.combos .cl{flex:0 0 auto;font-size:12px;color:var(--sub)}
+.cmb{flex:0 0 auto;border:1px solid transparent;border-radius:14px;padding:6px 12px;font:inherit;font-size:13px;color:var(--ink);text-align:left;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,#2ee6c4,#5b3fe8) border-box}
+.cmb small{display:block;font-size:11px;color:var(--sub)}.cmb:active{transform:scale(.96)}
+.lastb>span:last-child{flex:0 0 auto;display:flex;gap:6px;overflow:visible}
 /* 持股卡片 */
 .hcard{position:relative;margin-top:10px;padding:12px 14px 10px 16px;border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--hc) 16%,var(--card)),var(--card) 70%);border:1px solid color-mix(in srgb,var(--hc) 24%,transparent);cursor:pointer}
 .hcard::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:2px;background:var(--hc)}
@@ -212,8 +253,9 @@ body{background:radial-gradient(900px 500px at -10% -5%,rgba(46,230,196,.10),tra
 <section class="tab" id="t-rec"><div class="top"><b>記一筆</b><button class="ico" id="aClr">清除</button></div>
 <div class="seg" id="mode"><button data-k="e" class="on">📒 日常</button><button data-k="s">💹 股票</button><button data-k="m">🀄 麻將</button></div>
 <div class="ctx" id="ctx"></div>
-<div class="pnl on" id="p-e">
+<div class="pnl on" id="p-e" data-k="支出">
 <div class="ebar" id="eb" style="display:none"><span>✏️ 修改中</span><span><button class="ico" id="eDel" style="color:var(--up)">刪除</button> <button class="ico" id="eCx">取消</button></span></div>
+<div class="combos" id="combos"></div>
 <div class="seg" id="kind"><button data-k="支出" class="on">支出</button><button data-k="收入">收入</button><button data-k="轉帳">轉帳</button></div>
 <div class="dr"><input type="date" id="date"><div class="amt"><small class="ax" id="aX"></small><span>NT$</span> <b id="av">0</b></div></div>
 <div class="chips" id="cats"></div>
@@ -223,14 +265,14 @@ body{background:radial-gradient(900px 500px at -10% -5%,rgba(46,230,196,.10),tra
 <div class="f"><select id="proj"><option value="">專案</option><option>家庭開銷</option><option>出國旅遊</option></select><input type="number" id="fee" placeholder="手續費"></div>
 <div class="f"><select id="cur"><option value="">幣別</option><option value="JPY">¥ 日幣</option><option value="KRW">₩ 韓幣</option><option value="USD">$ 美金</option><option value="CNY">¥ 人民幣</option><option value="EUR">€ 歐元</option><option value="HKD">HK$ 港幣</option></select><input type="number" id="fa" placeholder="外幣金額"></div></details>
 </div>
-<div class="pnl" id="p-s">
+<div class="pnl" id="p-s" data-k="買進">
 <div class="seg" id="sk"><button data-k="買進" class="on">買進</button><button data-k="賣出">賣出</button><button data-k="定期定額">定期定額</button></div>
 <div class="dr"><input type="date" id="sD"><div class="seg mini" id="sm"><button data-k="現股" class="on">現</button><button data-k="當沖">沖</button></div><div class="amt sa"><small id="sTl">預估應付</small><b id="sTot">0</b></div></div>
 <div id="sFee"></div>
 <div class="f"><input id="sC" type="text" name="stock-code-x" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="股票代號（輸入，或點下方持股）"></div><div class="chips" id="codes"></div>
 <div class="tiles" id="tiles"><div class="tile on" data-f="q"><small>股數 <button class="unit" id="su" type="button">股</button></small><b id="sQv">0</b><small id="sQh"></small></div><div class="tile" data-f="p"><small>成交均價</small><b id="sPv">0</b><small></small></div></div>
 </div>
-<div class="pnl" id="p-m">
+<div class="pnl" id="p-m" data-k="贏">
 <div class="ebar" id="mEb" style="display:none"><span>✏️ 修改中</span><span><button class="ico" id="mDel" style="color:var(--up)">刪除</button> <button class="ico" id="mCx">取消</button></span></div>
 <div class="seg" id="mk"><button data-k="贏" class="on">贏</button><button data-k="輸">輸</button></div>
 <div class="dr"><input type="date" id="mD"><div class="amt"><small class="ax" id="mX"></small><span>NT$</span> <b id="mAv">0</b></div></div>
@@ -243,11 +285,11 @@ body{background:radial-gradient(900px 500px at -10% -5%,rgba(46,230,196,.10),tra
 <section class="tab" id="t-list"><div class="top"><b>明細</b></div>
 <div class="seg" id="lmode"><button data-k="e" class="on">📒 日常</button><button data-k="s">💹 股票</button><button data-k="m">🀄 麻將</button></div>
 <div class="card">
-<div class="lp on" id="l-e"><div class="srch"><input id="qe" type="search" enterkeyhint="search" placeholder="搜尋分類、帳戶、備註、金額…"><button class="ico" data-s="e">搜尋</button></div><div id="rec"></div></div>
+<div class="lp on" id="l-e"><div id="mbar"></div><div class="srch"><input id="qe" type="search" enterkeyhint="search" placeholder="搜尋分類、帳戶、備註、金額…"><button class="ico" data-s="e">搜尋</button></div><div class="chips qf" id="qf"></div><div id="rec"></div></div>
 <div class="lp" id="l-s"><div class="srch"><input id="qs" type="search" enterkeyhint="search" placeholder="搜尋代號、名稱、日期…"><button class="ico" data-s="s">搜尋</button></div><div id="stkL"></div></div>
 <div class="lp" id="l-m"><div class="srch"><input id="qm" type="search" enterkeyhint="search" placeholder="搜尋日期、輸贏、金額…"><button class="ico" data-s="m">搜尋</button></div><div id="mjL"></div></div>
 </div>
-<p class="hint">點一下日常或麻將的記錄可以修改、刪除；股票請回 Sheet 修改</p>
+<p class="hint">日常、麻將的記錄：點一下或往左滑可以修改、刪除；股票請回 Sheet 修改</p>
 </section>
 </main>
 <nav id="nav"><i id="npill"></i><button class="on" data-t="home"><b>🏠</b>總覽</button><button data-t="inv"><b>📈</b>投資</button><button data-t="rec"><b>✏️</b>記一筆</button><button data-t="list"><b>🧾</b>明細</button></nav>
@@ -291,7 +333,7 @@ function moreBtn(k){const x=XE[k];if(!R&&k!=='s')return'';const can=x.more&&next
   return`<button class="ico more" data-more="${k}"${x.busy?' disabled':''}>${x.busy?'載入中…':'更多'}</button>`}
 /* ===== 搜尋：在最近記錄展開後的搜尋框，向後端查整張表（空白分隔＝每個字都要符合）；結果點一下一樣可以修改 ===== */
 const SKD={e:'expense',m:'mahjong',s:'stock'},esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const EMP=k=>SR[k]?'<div class="empty">沒有符合的記錄</div>':'<div class="empty">還沒有記錄</div>';
+const EMP=k=>SR[k]?'<div class="empty ill"><div class="em">🔍</div>找不到耶，換個關鍵字試試</div>':`<div class="empty ill"><div class="em">${{e:'🌱',m:'🀄',s:'📈'}[k]}</div>${{e:'還沒有記錄，到「記一筆」記下第一筆吧',m:'還沒有麻將記錄，下次開桌記得記一筆',s:'還沒有股票記錄'}[k]}</div>`;
 const sInfo=k=>SR[k]?`<div class="sub">搜尋「${esc(SR[k].q)}」：共 ${SR[k].total} 筆${SR[k].total>SR[k].recs.length?'，只顯示最新 '+SR[k].recs.length+' 筆':''}</div>`:'';
 async function doSearch(k){
   const q=$('#q'+k).value.trim();
@@ -447,7 +489,32 @@ function hideSplash(){const e=$('#splash');if(!e||e.dataset.h)return;e.dataset.h
 function mergeRec(a){const o=[],TC=CATS.轉帳;for(let i=0;i<a.length;i++){const x=a[i],y=a[i+1];
   if(x.type==='轉帳'){o.push({...x,transfer:true,from:x.account,to:x.toAccount||'',fee:x.fee||0,o:[x]});continue}
   if(y&&TC.includes(x.category)&&x.type==='收入'&&y.type==='支出'&&y.category===x.category&&y.date===x.date&&y.amount===x.amount&&(x.row==null||x.row===y.row+1)){o.push({...x,transfer:true,from:y.account,to:x.account,fee:y.fee||0,o:[y,x]});i++}else o.push(x)}return o}
-function trRow(r,i){return`<div class="row" data-e="${i}" style="cursor:pointer">${rowL(icon(r.category),r.category,`${r.date} · ${r.from} ➜ ${r.to}${r.fee>0?' · 手續費 '+r.fee.toLocaleString():''}${r.note?' · '+esc(r.note):''}`)}<b style="color:var(--tr)">${r.amount.toLocaleString()}</b></div>`}
+function trRow(r,i){return`<div class="row" data-e="${i}" style="cursor:pointer;--cc:${ccol(r.category)}">${rowL(icon(r.category),r.category,`${r.date} · ${r.from} ➜ ${r.to}${r.fee>0?' · 手續費 '+r.fee.toLocaleString():''}${r.note?' · '+esc(r.note):''}`,ccol(r.category))}<b style="color:var(--tr)">${r.amount.toLocaleString()}</b>${RACT}</div>`}
+/* 明細往左滑露出「修改／刪除」（日常、麻將）；同時只開一列，點別的地方就收回 */
+const RACT='<div class="ract"><button data-act="ed">修改</button><button data-act="del">刪除</button></div>';
+let rs=null,openRow=null;
+function closeRow(r){r.style.setProperty('--sx','0px');r.classList.remove('open');if(openRow===r)openRow=null}
+document.addEventListener('touchstart',e=>{const r=e.target.closest('#rec .row[data-e],#mjL .row[data-m]');if(openRow&&openRow!==r)closeRow(openRow);
+  rs=r&&!e.target.closest('.ract')?{r,x:e.touches[0].clientX,y:e.touches[0].clientY,base:r.classList.contains('open')?-132:0,h:null}:null},{passive:true});
+document.addEventListener('touchmove',e=>{if(!rs)return;const dx=e.touches[0].clientX-rs.x,dy=e.touches[0].clientY-rs.y;
+  if(rs.h===null){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;rs.h=Math.abs(dx)>Math.abs(dy)*1.2}
+  if(!rs.h)return;rs.r.classList.add('drag');rs.r.style.setProperty('--sx',Math.max(-132,Math.min(0,rs.base+dx))+'px')},{passive:true});
+document.addEventListener('touchend',()=>{if(!rs)return;const s=rs;rs=null;s.r.classList.remove('drag');if(!s.h)return;
+  const open=(parseFloat(s.r.style.getPropertyValue('--sx'))||0)<-60;s.r.style.setProperty('--sx',open?'-132px':'0px');s.r.classList.toggle('open',open);openRow=open?s.r:null;s.r._sw=Date.now()});
+async function rowAct(b){const rw=b.closest('.row'),isE=rw.dataset.e!=null,r=isE?EL[+rw.dataset.e]:ML[+rw.dataset.m];closeRow(rw);if(!r)return;
+  if(b.dataset.act==='ed'){isE?startEdit(r):startEditMj(r);return}
+  if(r.row==null)return toast('請先把後端程式更新到新版，才能使用刪除',3500);
+  if(isE){const orig=(r.o||[r]).map(o=>({row:o.row,date:o.date,type:o.type,category:o.category,account:o.account,amount:o.amount,note:o.note||''}));
+    if(!await ask('🗑️ 要刪掉這筆嗎？',orig.length===2?'這是一筆轉帳，兩列會一起刪掉。刪了就回不來囉！':`${r.category} ${r.amount.toLocaleString()}（${r.date}）刪了就回不來囉`,'刪除','再想想'))return;
+    send(b,'deleteExpense',{orig},()=>toast('已刪除 👋'))}
+  else{if(!await ask('🗑️ 要刪掉這筆嗎？',`麻將${r.result} ${r.amount.toLocaleString()}（${r.date}）刪了就回不來囉`,'刪除','再想想'))return;
+    send(b,'deleteMahjong',{orig:{row:r.row,date:r.date,result:r.result,amount:r.amount}},()=>toast('已刪除 👋'))}}
+/* 搜尋框下的快速篩選：本月、收入、最常用的帳戶和分類；點一下加進搜尋，再點一下拿掉 */
+function drawQf(){const ex=(R&&R.expenses)||[],top=f=>Object.entries(ex.reduce((m,x)=>{const k=f(x);if(k)m[k]=(m[k]||0)+1;return m},{})).sort((a,b)=>b[1]-a[1]).slice(0,2).map(x=>x[0]),q=$('#qe').value;
+  $('#qf').innerHTML=[['📅 本月',monthTok()],['💰 收入','收入']].concat(top(x=>x.account).map(a=>['💳 '+a,a]),top(x=>x.category).map(c=>[icon(c)+' '+c,c]))
+    .map(([l,t])=>`<button class="chip${q.includes(t)?' on':''}" data-qt="${esc(t)}">${esc(l)}</button>`).join('')}
+$('#qf').onclick=e=>{const b=e.target.closest('[data-qt]');if(!b)return;const t=b.dataset.qt,q=$('#qe').value;
+  $('#qe').value=(q.includes(t)?q.replace(t,''):q+' '+t).replace(/\s+/g,' ').trim();if($('#qe').value)doSearch('e');else{SR.e=null;render()}};
 function stockRecent(){
   if(R&&Array.isArray(R.stocks))return R.stocks;
   try{return JSON.parse(st.get('stk')||'[]')}catch(e){return[]}}
@@ -505,15 +572,26 @@ function render(){hideSplash();$('#app').classList.toggle('priv',hid);
   renderAccSel();
   syncX();if(R){EL=SR.e?mergeRec(SR.e.recs):shownE();ML=SR.m?SR.m.recs:shownM()}
   let lastD='';
-  $('#rec').innerHTML=pendHtml('addExpense')+EL.map((r,i)=>{const d=isoOf(r),h=d!==lastD?dayHead(d):'';lastD=d;return h+(r.transfer?trRow(r,i):`<div class="row" data-e="${i}" style="cursor:pointer">${rowL(icon(r.category),r.category,`${r.date} · ${r.account}${r.note?' · '+esc(r.note):''}`)}<b class="${r.type==='收入'?'up':'down'}">${r.type==='收入'?'+':'-'}${r.amount.toLocaleString()}</b></div>`)}).join('')||EMP('e');
+  $('#rec').innerHTML=pendHtml('addExpense')+EL.map((r,i)=>{const d=isoOf(r),h=d!==lastD?dayHead(d):'';lastD=d;return h+(r.transfer?trRow(r,i):`<div class="row" data-e="${i}" style="cursor:pointer;--cc:${ccol(r.category)}">${rowL(icon(r.category),r.category,`${r.date} · ${r.account}${r.note?' · '+esc(r.note):''}`,ccol(r.category))}<b class="${r.type==='收入'?'up':'down'}">${r.type==='收入'?'+':'-'}${r.amount.toLocaleString()}</b>${RACT}</div>`)}).join('')||EMP('e');
   $('#rec').innerHTML=sInfo('e')+$('#rec').innerHTML+(SR.e?'':moreBtn('e'));
-  $('#mjL').innerHTML=pendHtml('addMahjong')+ML.map((m,i)=>`<div class="row" data-m="${i}" style="cursor:pointer">${rowL(MJI(m.result),m.result,m.date)}<b class="${m.result==='贏'?'up':'down'}">${m.result==='贏'?'+':'-'}${m.amount.toLocaleString()}</b></div>`).join('')||EMP('m');
+  $('#mjL').innerHTML=pendHtml('addMahjong')+ML.map((m,i)=>{const c=m.result==='贏'?'#ff6b61':'#3fcf8e';return`<div class="row" data-m="${i}" style="cursor:pointer;--cc:${c}">${rowL(MJI(m.result),m.result,m.date,c)}<b class="${m.result==='贏'?'up':'down'}">${m.result==='贏'?'+':'-'}${m.amount.toLocaleString()}</b>${RACT}</div>`}).join('')||EMP('m');
   $('#mjL').innerHTML=sInfo('m')+$('#mjL').innerHTML+(SR.m?'':moreBtn('m'));
-  $('#stkL').innerHTML=pendHtml('addStock')+(SR.s?SR.s.recs:shownS()).map(r=>{const q=r.quantity!=null?r.quantity:r.qty,p=r.price,c=String(r.stock||r.code||'').replace('定期定額','').trim(),n=nameOf(c);return`<div class="row">${rowL(STI[r.type]||'📊',c+(n?` <span class="nm">${esc(n)}</span>`:''),`${r.date||''} · <span class="${TPC[r.type]||''}">${r.type||''}</span>`)}<div class="r"><b>${q!=null?Number(q).toLocaleString()+' 股':''}</b>${p!=null?`<small>成交均價 <span class="n">${p}</span></small>`:''}</div></div>`}).join('')||EMP('s');$('#stkL').innerHTML=sInfo('s')+$('#stkL').innerHTML+(SR.s?'':moreBtn('s'));renderMonthly();updPend();renderCtx()}
+  $('#stkL').innerHTML=pendHtml('addStock')+(SR.s?SR.s.recs:shownS()).map(r=>{const q=r.quantity!=null?r.quantity:r.qty,p=r.price,c=String(r.stock||r.code||'').replace('定期定額','').trim(),n=nameOf(c);return`<div class="row">${rowL(STI[r.type]||'📊',c+(n?` <span class="nm">${esc(n)}</span>`:''),`${r.date||''} · <span class="${TPC[r.type]||''}">${r.type||''}</span>`)}<div class="r"><b>${q!=null?Number(q).toLocaleString()+' 股':''}</b>${p!=null?`<small>成交均價 <span class="n">${p}</span></small>`:''}</div></div>`}).join('')||EMP('s');$('#stkL').innerHTML=sInfo('s')+$('#stkL').innerHTML+(SR.s?'':moreBtn('s'));renderMonthly();renderMbar();updPend();renderCtx();drawCombos();drawQf()}
 // 明細的日期標題：11/3（一），右邊是這天（已載入的記錄裡）的收入、支出小計，轉帳不算
-const WK='日一二三四五六';
+const WK='日一二三四五六',YDAY=(()=>{const d=new Date(today+'T00:00');d.setDate(d.getDate()-1);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')})();
+// 每個分類一個顏色：明細的圖示底色、右邊的細色條、本月支出長條都用這個
+const CCOL={飲食:'#ff8a65',購物:'#f06292',住家:'#a1887f',交通:'#4fc3f7',學習:'#9575cd',娛樂:'#ba68c8',健康:'#4db6ac',金融:'#90a4ae',保險:'#7986cb',送禮:'#e57373',稅金:'#bcaaa4',其他:'#b0bec5',
+  主動收入:'#ffb74d',被動收入:'#81c784',意外收入:'#fff176',存款:'#64b5f6',投資:'#7986cb',繳卡費:'#4dd0e1',手續費:'#bdbdbd',其餘分類:'#78909c'},ccol=c=>CCOL[c]||'#90a4ae';
+/* 明細最上方：本月支出依分類分段的彩色長條，點一段（或下面的分類）就搜尋本月的那個分類 */
+function monthTok(){const s=((R&&R.expenses&&R.expenses[0])||{}).date||'',sep=s.includes('-')?'-':'/',pad=!/[\/\-]\d[\/\-]/.test(s);return today.slice(0,4)+sep+(pad?today.slice(5,7):String(+today.slice(5,7)))+sep}
+function renderMbar(){const e=$('#mbar'),d=MD[today.slice(0,7)];if(!d||!d.cats||!d.cats.length){e.innerHTML='';return}
+  const cs=d.cats.slice(0,6),rest=d.cats.slice(6).reduce((a,c)=>a+c.value,0);if(rest>0)cs.push({name:'其餘分類',value:rest});const tot=cs.reduce((a,c)=>a+c.value,0)||1,q=c=>c.name==='其餘分類'?'':` data-mq="${esc(c.name)}"`;
+  e.innerHTML=`<div class="mbh"><span>本月支出</span>${HP(fmt(d.expense))}</div><div class="mbr${hid?' pv':''}">${cs.map(c=>`<i${q(c)} style="flex-grow:${c.value};background:${ccol(c.name)}"></i>`).join('')}</div>
+  <div class="mbl">${cs.slice(0,5).map(c=>`<span${q(c)}><i style="background:${ccol(c.name)}"></i>${icon(c.name)} ${esc(c.name)} <b>${Math.round(c.value/tot*100)}%</b></span>`).join('')}</div>`}
+$('#mbar').onclick=e=>{const t=e.target.closest('[data-mq]');if(!t)return;$('#qe').value=t.dataset.mq+' '+monthTok();doSearch('e')};
 function dayHead(d){const g=EL.filter(x=>!x.transfer&&isoOf(x)===d),sum=t=>g.filter(x=>x.type===t).reduce((p,x)=>p+x.amount,0),n=sum('收入'),o=sum('支出');
-  return`<div class="dh"><span>${d.slice(0,4)!==today.slice(0,4)?d.slice(0,4)+'/':''}${+d.slice(5,7)}/${+d.slice(8)}（${WK[new Date(d+'T00:00').getDay()]}）</span><span>${n?`<span class="up">+${n.toLocaleString()}</span> `:''}${o?`<span class="down">-${o.toLocaleString()}</span>`:''}</span></div>`}
+  const wd=new Date(d+'T00:00').getDay(),md=`${d.slice(0,4)!==today.slice(0,4)?d.slice(0,4)+'/':''}${+d.slice(5,7)}/${+d.slice(8)}（${WK[wd]}）`;
+  return`<div class="dh"><span class="${wd===0||wd===6?'we':''}">${d===today?'今天 <small>'+md+'</small>':d===YDAY?'昨天 <small>'+md+'</small>':md}</span><span>${n?`<span class="up">+${n.toLocaleString()}</span> `:''}${o?`<span class="down">-${o.toLocaleString()}</span>`:''}</span></div>`}
 // 待同步（離線暫存）的記錄：顯示在最近記錄最上面，點一下可以刪除
 function pendHtml(a){return Q.filter(q=>q.action===a).reverse().map(q=>{const p=q.payload,tag='<span class="pend">待同步</span>';let h;
   if(a==='addExpense'){const tr=p.type==='轉帳';h=rowL(icon(p.category),p.category,`${p.date} · ${tr?p.fromAccount+' → '+p.toAccount:p.account}${p.note?' · '+esc(p.note):''}${tag}`)+`<b style="color:${tr?'var(--tr)':p.type==='收入'?'var(--up)':'var(--down)'}">${tr?'':p.type==='收入'?'+':'-'}${Number(p.amount).toLocaleString()}</b>`}
@@ -546,7 +624,7 @@ async function send(btn,action,payload,after){
 const ICON={飲食:'🍜',購物:'🛍️',住家:'🏠',交通:'🚗',學習:'📚',娛樂:'🎮',健康:'💊',金融:'🏦',保險:'🛡️',送禮:'🎁',稅金:'🧾',其他:'📦',主動收入:'💼',被動收入:'🌱',意外收入:'🍀',存款:'🫙',投資:'📈',繳卡費:'💳',手續費:'🪙',其餘分類:'🗂️'};
 const icon=c=>ICON[c]||'📌',STI={定期定額:'🐿️',現股買入:'📈',現股沖買:'⚡',現股賣出:'💵',現股沖賣:'⚡',股票申購:'🎟️'};
 const MJI=r=>r==='贏'?'🀄':'🫠';
-const rowL=(ic,t,s)=>`<div class="l"><span class="ic">${ic}</span><div>${t}<small>${s}</small></div></div>`;
+const rowL=(ic,t,s,c)=>`<div class="l"><span class="ic"${c?` style="--cc:${c}"`:''}>${ic}</span><div>${t}<small>${s}</small></div></div>`;
 const GOL={支出:'💸 花出去了',收入:'💰 入袋為安',轉帳:'🔁 轉過去',買進:'📈 買進成交',賣出:'💵 賣出成交',定期定額:'🐿️ 定期定額存一筆',贏:'🀄 胡了！記下來',輸:'🫠 繳學費了'};
 const GOD={支出:'✓ 記好了',收入:'✓ 記好了',轉帳:'✓ 轉好了',買進:'✓ 送出囉',賣出:'✓ 送出囉',定期定額:'✓ 又存了一筆',贏:'✓ 恭喜發財',輸:'✓ 下次贏回來'};
 let mode='e',lmode='e',sk='買進',smd='現股',su='股',sf='q',sq='',sp='',ma='';
@@ -555,12 +633,16 @@ function updGo(){setL('go',ed?'✏️ 儲存修改':GOL[kind],ed?'✓ 已修改'
   ['go','sGo','mGo'].forEach((id,i)=>$('#'+id).style.display='esm'[i]===mode?'':'none')}
 function goTab(t,dir){$$('nav button').forEach(x=>x.classList.toggle('on',x.dataset.t===t));$('#nav').style.setProperty('--i',['home','inv','rec','list'].indexOf(t));$$('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+t));$('main').scrollTop=0;
   if(dir){const s=$('#t-'+t);s.classList.remove('sl','sr');void s.offsetWidth;s.classList.add(dir>0?'sl':'sr')}}
-/* 左右滑動切換頁籤（總覽 ⇄ 投資 ⇄ 記一筆 ⇄ 明細）；從輸入框、數字鍵盤、信用卡卡片開始滑的不算 */
-const TABS=['home','inv','rec','list'];let tx=null;
+const TABS=['home','inv','rec','list'];
 $('main').addEventListener('scroll',()=>{const s=$('main').scrollTop>4;$$('.top').forEach(t=>t.classList.toggle('sc',s))},{passive:true});
-$('main').addEventListener('touchstart',e=>{const t=e.touches[0];tx=e.touches.length===1&&!e.target.closest('input,select,textarea,#pad,.ccw')?{x:t.clientX,y:t.clientY,t:Date.now()}:null},{passive:true});
-$('main').addEventListener('touchend',e=>{if(!tx)return;const t=e.changedTouches[0],dx=t.clientX-tx.x,dy=t.clientY-tx.y,ok=Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.8&&Date.now()-tx.t<700;tx=null;if(!ok)return;
-  const n=TABS.indexOf($('.tab.on').id.slice(2))+(dx<0?1:-1);if(n>=0&&n<TABS.length)goTab(TABS[n],dx<0?1:-1)},{passive:true});
+/* 在底部選單上左右滑動切換頁籤（上面的操作區不受影響）：膠囊跟著手指走，放開停在最近的頁籤；快速一撥就換到隔壁頁 */
+let nx=null,navDrag=0;
+$('#nav').addEventListener('touchstart',e=>{const r=$('#nav').getBoundingClientRect();nx={x:e.touches[0].clientX,t:Date.now(),w:r.width,i:TABS.indexOf($('.tab.on').id.slice(2)),moved:false}},{passive:true});
+$('#nav').addEventListener('touchmove',e=>{if(!nx)return;const dx=e.touches[0].clientX-nx.x;if(!nx.moved&&Math.abs(dx)<8)return;
+  if(!nx.moved){nx.moved=true;$('#nav').classList.add('drag')}$('#nav').style.setProperty('--i',Math.max(0,Math.min(3,nx.i+dx/(nx.w/4))).toFixed(3))},{passive:true});
+$('#nav').addEventListener('touchend',e=>{if(!nx)return;const s=nx;nx=null;$('#nav').classList.remove('drag');if(!s.moved)return;navDrag=Date.now();
+  const dx=e.changedTouches[0].clientX-s.x,n=Math.max(0,Math.min(3,Date.now()-s.t<250&&Math.abs(dx)>20?s.i+Math.sign(dx):Math.round(s.i+dx/(s.w/4))));
+  if(n!==s.i){goTab(TABS[n],n>s.i?1:-1);try{navigator.vibrate&&navigator.vibrate(8)}catch(_){}}else $('#nav').style.setProperty('--i',s.i)},{passive:true});
 function setMode(m){mode=m;$$('#mode button').forEach(b=>b.classList.toggle('on',b.dataset.k===m));$$('.pnl').forEach(p=>p.classList.toggle('on',p.id==='p-'+m));drawPad();updGo();updNum()}
 function setLM(m){lmode=m;$$('#lmode button').forEach(b=>b.classList.toggle('on',b.dataset.k===m));$$('.lp').forEach(p=>p.classList.toggle('on',p.id==='l-'+m))}
 $('#mode').onclick=e=>{const b=e.target.closest('[data-k]');if(b)setMode(b.dataset.k)};
@@ -572,12 +654,32 @@ function burst(kind,txt){if(RM)return;const app=$('#app').getBoundingClientRect(
   if(kind==='coin')for(let i=0;i<10;i++)add('🪙','coin',at('#'+go.id),(Math.random()-.5)*240,i*45);
   else if(kind==='drop'){const p=at(mode==='m'?'#mAv':'#av');add(txt,'drop',[p[0],p[1]],0,0)}
   else add(txt,'pop',at('#'+go.id),0,0)}
-function setLast(t,d){$('#last').innerHTML=`<div class="lastb"><span>${d?'剛記下':'⏳ 已暫存'}：${esc(t)}</span><button class="ico" id="toList">看明細</button></div>`}
+// 「剛記下」那條：redo 有內容時多一顆「再記一筆」，把同樣的分類、帳戶、金額、備註帶回來
+let LR=null;
+function setLast(t,d,redo){LR=redo||null;$('#last').innerHTML=`<div class="lastb"><span>${d?'剛記下':'⏳ 已暫存'}：${esc(t)}</span><span>${redo?'<button class="ico" id="redo">↻ 再記一筆</button> ':''}<button class="ico" id="toList">看明細</button></span></div>`}
+function redoLast(){const x=LR;if(!x)return;
+  if(x.k==='m'){mres=x.r;$('#p-m').dataset.k=mres;$$('#mk button').forEach(b=>b.classList.toggle('on',b.dataset.k===mres));ma=String(x.a);updGo();updNum();return}
+  const p=x.pl;if(ed)clearAdd();setKind(p.type);cat=p.category;drawCats();$('#acc').value=p.type==='轉帳'?p.fromAccount:p.account;$('#acc2').value=p.toAccount||'';colorSel($('#acc'));colorSel($('#acc2'));
+  accTouched=true;amt=String(p.amount);$('#note').value=p.note||'';updNum();toast('已帶入，確認後按下方按鈕送出')}
+// 提示列沒有在顯示帳戶時：今天記了幾筆、花了多少（含還沒送出的暫存）
+function todaySum(){const t=fullE().filter(r=>!r.transfer&&isoOf(r)===today),q=Q.filter(x=>x.action==='addExpense'&&x.payload.date===today),
+    n=t.length+q.length,o=t.filter(r=>r.type==='支出').reduce((p,r)=>p+r.amount,0)+q.filter(x=>x.payload.type==='支出').reduce((p,x)=>p+Number(x.payload.amount),0);
+  return n?`📅 今天已記 <b class="tdn">${n}</b> 筆 <small>·</small> 支出 <b class="down">${HP(fmt(o))}</b>`:'<small>📅 今天還沒記帳，來記第一筆吧</small>'}
+/* 常用組合：記過 2 次以上的「分類＋帳戶＋備註」，最常用的 3 組放在最上面，點一下就填好（金額自己輸入） */
+let CB={};try{CB=JSON.parse(st.get('combo')||'{}')}catch(e){}
+function drawCombos(){const e=$('#combos');if(ed){e.innerHTML='';return}const all={};
+  ((R&&R.expenses)||[]).filter(x=>x.type!=='轉帳'&&!TRANSFER_C.includes(x.category)).forEach(x=>{const k=JSON.stringify([x.type,x.category,x.account,'',String(x.note||'').trim()]);all[k]=all[k]||{n:0,t:0};all[k].n++});
+  Object.entries(CB).forEach(([k,v])=>{all[k]={n:Math.max(v.n,(all[k]||{}).n||0),t:v.t}});
+  const top=Object.entries(all).filter(([,v])=>v.n>=2).sort((a,b)=>b[1].n-a[1].n||b[1].t-a[1].t).slice(0,3);
+  e.innerHTML=top.length?'<span class="cl">⚡ 常用</span>'+top.map(([k])=>{const[ty,c,a,,n]=JSON.parse(k);return`<button class="cmb" data-ck="${esc(k)}">${icon(c)} ${esc(c)}<small>${esc(a)}${n?' · '+esc(n):''}</small></button>`}).join(''):''}
+const TRANSFER_C=CATS.轉帳;
+$('#combos').onclick=e=>{const b=e.target.closest('[data-ck]');if(!b)return;const[ty,c,a,a2,n]=JSON.parse(b.dataset.ck);
+  if(kind!==ty)setKind(ty);cat=c;drawCats();$('#acc').value=a;$('#acc2').value=a2||'';colorSel($('#acc'));colorSel($('#acc2'));accTouched=true;$('#note').value=n||'';renderCtx();bump('#av')};
 /* 上方提示條：依照正在輸入的內容顯示（帳戶餘額／庫存／麻將累計），不重複總覽頁的統計 */
 function renderCtx(){const e=$('#ctx');if(!e)return;let h='';
   if(mode==='e'){const fa=$('#acc').value,ta=$('#acc2').value,one=n=>{const a=D&&D.accounts.find(x=>x.name===n);if(!a)return'';return`<b>${n}</b> ${HP(fmt(a.balance))}${a.limit>0?` <small>· 剩餘額度 ${HP(fmt(a.limit+a.balance))}</small>`:''}`};
     if(kind==='轉帳')h=fa||ta?`${one(fa)||'<small>轉出帳戶</small>'} <small>➜</small> ${one(ta)||'<small>轉入帳戶</small>'}`:'<small>選好轉出、轉入帳戶，這裡會顯示餘額</small>';
-    else h=fa?one(fa):'<small>選好帳戶，這裡會顯示餘額</small>';
+    else h=fa?one(fa):todaySum();
     if(hid&&(fa||ta))h+=' <small>（總覽按「顯示」可看金額）</small>'}
   else if(mode==='s'){const c=$('#sC').value.trim().split(' ')[0];
     if(c.length<2)h='<small>輸入代號，這裡會顯示庫存</small>';
@@ -587,16 +689,16 @@ function renderCtx(){const e=$('#ctx');if(!e)return;let h='';
   else{const g=((R&&R.mahjong)||[]).slice(0,5);
     if(!g.length)h='<small>還沒有麻將記錄</small>';
     else{const w=g.filter(x=>x.result==='贏').length,net=g.reduce((p,x)=>p+(x.result==='贏'?x.amount:-x.amount),0);
-      h=`近 ${g.length} 場 <span class="dots">${g.slice().reverse().map(x=>`<i class="${x.result==='贏'?'w':'l'}"></i>`).join('')}</span> <b>${w} 勝 ${g.length-w} 敗</b> <small>· 勝率 ${Math.round(w/g.length*100)}% · ${net>=0?'贏':'輸'}</small> <b class="${net>=0?'up':'down'}">${Math.abs(net).toLocaleString()}</b>`}}
+      h=`近 ${g.length} 場 <span>${g.slice().reverse().map(x=>`<i class="mt ${x.result==='贏'?'w':'l'}">${x.result}</i>`).join('')}</span> <b>${w} 勝 ${g.length-w} 敗</b> <small>· 勝率 ${Math.round(w/g.length*100)}% · ${net>=0?'贏':'輸'}</small> <b class="${net>=0?'up':'down'}">${Math.abs(net).toLocaleString()}</b>`}}
   e.innerHTML=h}
-function drawCats(){$('#cats').innerHTML=CATS[kind].map(c=>`<button class="chip${c===cat?' on':''}" data-c="${c}">${icon(c)} ${c}</button>`).join('');drawNotes()}
+function drawCats(){$('#cats').innerHTML=CATS[kind].map(c=>`<button class="chip${c===cat?' on':''}" data-c="${c}">${icon(c)} ${c}</button>`).join('');drawNotes();drawCombos()}
 /* 記一筆更快：每個分類記住上次用的帳戶（自己改過帳戶就不覆蓋）；備註下方列出這個分類最近用過的備註 */
 let LA={},NH=[],accTouched=false;try{LA=JSON.parse(st.get('lastAcc')||'{}')}catch(e){}try{NH=JSON.parse(st.get('notes')||'[]')}catch(e){}
 function drawNotes(){const seen=new Set(),out=[];
   if(cat)NH.filter(x=>x.c===cat).concat(((R&&R.expenses)||[]).filter(x=>x.category===cat).map(x=>({n:x.note}))).forEach(x=>{const n=String(x.n||'').trim();if(n&&!seen.has(n)&&out.length<6){seen.add(n);out.push(n)}});
   $('#nchips').innerHTML=out.map(n=>`<button class="chip nc" data-n="${esc(n)}">${esc(n)}</button>`).join('')}
 $('#nchips').onclick=e=>{const b=e.target.closest('[data-n]');if(b)$('#note').value=b.dataset.n};
-function setKind(k){if(ed&&ed.orig.length===2&&k!=='轉帳')return toast('一般記錄和轉帳不能互相切換，請回 Sheet 修改');kind=k;cat='';$$('#kind button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));$('#acc2').style.display=k==='轉帳'?'':'none';drawCats();updGo();renderAccSel();renderCtx()}
+function setKind(k){if(ed&&ed.orig.length===2&&k!=='轉帳')return toast('一般記錄和轉帳不能互相切換，請回 Sheet 修改');kind=k;cat='';$('#p-e').dataset.k=k;$$('#kind button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));$('#acc2').style.display=k==='轉帳'?'':'none';drawCats();updGo();renderAccSel();renderCtx()}
 function clearAdd(){ed=null;accTouched=false;$('#eb').style.display='none';amt='';cat='';['note','fee','fa'].forEach(i=>$('#'+i).value='');$('#date').value=today;$('#proj').value='';$('#cur').value='';$('#acc').value='';$('#acc2').value='';setKind('支出');updNum()}
 $('#kind').onclick=e=>{const b=e.target.closest('[data-k]');if(b)setKind(b.dataset.k)};
 $('#cats').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;cat=b.dataset.c;drawCats();if(kind==='轉帳'){if(cat==='投資'){const sc=D&&D.accounts.find(a=>a.type==='sec');$('#acc').value=(D&&D.invFrom)||'';$('#acc2').value=sc?sc.name:''}else $('#acc2').value='';colorSel($('#acc'));colorSel($('#acc2'))}
@@ -612,10 +714,20 @@ $('#pad').onclick=e=>{const k=e.target.dataset.k;if(!k)return;const pr=mode==='s
   else if(k==='+'||k==='-'){if(!v)return;v='+-'.includes(v.slice(-1))?v.slice(0,-1)+k:v+k}
   else if(k==='='){const n=ev(v);v=n>0?String(n):''}
   else{const seg=v.split(/[+-]/).pop();if(pr&&seg.includes('.')&&seg.split('.')[1].length>=2)return;if(seg.replace('.','').length>=9)return;v=seg==='0'?v.slice(0,-1)+k:v+k}
-  if(mode==='e')amt=v;else if(mode==='m')ma=v;else if(sf==='q')sq=v;else sp=v;updNum()};
+  if(mode==='e')amt=v;else if(mode==='m')ma=v;else if(sf==='q')sq=v;else sp=v;updNum();
+  bump(mode==='e'?'#av':mode==='m'?'#mAv':sf==='q'?'#sQv':'#sPv')};
+// 記一筆的金額：有加減算式時結果用滾的（不受「隱藏」影響，這是正在輸入的數字）
+function tween(sel,v){const el=$(sel);cancelAnimationFrame(el._tr);const a=el._tv==null?v:el._tv;el._tv=v;
+  if(a===v||RM||Math.abs(v-a)<10){el.textContent=v.toLocaleString();return}
+  const t0=performance.now(),st=t=>{const p=Math.min(1,(t-t0)/220);el.textContent=Math.round(a+(v-a)*(1-Math.pow(1-p,3))).toLocaleString();if(p<1)el._tr=requestAnimationFrame(st)};el._tr=requestAnimationFrame(st)}
+// 鍵盤手感：按下有漣漪和輕微震動；金額彈一下；算式最後是＋或－時那顆鍵亮著
+const bump=s=>{const el=$(s);el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump')};
+$('#pad').addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b)return;try{navigator.vibrate&&navigator.vibrate(8)}catch(_){}if(RM)return;
+  const r=b.getBoundingClientRect(),z=Math.max(r.width,r.height),s=document.createElement('span');s.className='rp';s.style.cssText=`width:${z}px;height:${z}px;left:${e.clientX-r.left-z/2}px;top:${e.clientY-r.top-z/2}px`;b.appendChild(s);setTimeout(()=>s.remove(),500)});
+function padOps(){const v=mode==='e'?amt:mode==='m'?ma:'';$$('#pad [data-k="+"],#pad [data-k="-"]').forEach(b=>b.classList.toggle('act',v.slice(-1)===b.dataset.k))}
 const qty=()=>{const n=Number(sq)||0;return su==='張'?Math.round(n*1000):n};
 const stype=()=>sk==='定期定額'?'定期定額':sk==='買進'?(smd==='當沖'?'現股沖買':'現股買入'):(smd==='當沖'?'現股沖賣':'現股賣出');
-function updNum(){$('#av').textContent=ev(amt).toLocaleString();$('#mAv').textContent=ev(ma).toLocaleString();$('#aX').textContent=fx(amt);$('#mX').textContent=fx(ma);
+function updNum(){tween('#av',ev(amt));tween('#mAv',ev(ma));padOps();$('#aX').textContent=fx(amt);$('#mX').textContent=fx(ma);
   $('#sQv').textContent=sq?Number(sq).toLocaleString():'0';$('#su').textContent=su;$('#sQh').textContent=su==='張'&&sq?'＝ '+qty().toLocaleString()+' 股':'';
   $('#sPv').textContent=sp||'0';calc();renderCtx()}
 // 股票：預估金額算法與 Sheet 相同（手續費 0.1425% × 2.8 折、定期定額 1 元；ETF 稅 0.1%、股票 0.3%、當沖 0.15%）
@@ -626,7 +738,7 @@ function calc(){const t=stype(),c=$('#sC').value.trim().split(' ')[0],q=qty(),p=
   const etf=c.startsWith('00'),b=Math.floor(q*p),fee=t==='定期定額'?1:Math.floor(b*0.001425*0.28),tax=sell?Math.floor(b*(etf?0.001:smd==='當沖'?0.0015:0.003)):0;
   o.textContent=(sell?b-fee-tax:b+fee).toLocaleString();fitTot();
   f.textContent=sell?`成交 ${b.toLocaleString()} − 手續費 ${fee} − 交易稅 ${tax.toLocaleString()}`:`成交 ${b.toLocaleString()} ＋ 手續費 ${fee}`}
-$('#sk').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;sk=b.dataset.k;$$('#sk button').forEach(x=>x.classList.toggle('on',x===b));$('#sm').style.visibility=sk==='定期定額'?'hidden':'';updGo();updNum()};
+$('#sk').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;sk=b.dataset.k;$('#p-s').dataset.k=sk;$$('#sk button').forEach(x=>x.classList.toggle('on',x===b));$('#sm').style.visibility=sk==='定期定額'?'hidden':'';updGo();updNum()};
 $('#sm').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;smd=b.dataset.k;$$('#sm button').forEach(x=>x.classList.toggle('on',x===b));updNum()};
 $('#tiles').onclick=e=>{if(e.target.id==='su'){const q=qty();su=su==='股'?'張':'股';sq=q?String(su==='張'?q/1000:q):'';updNum();return}
   const t=e.target.closest('[data-f]');if(!t)return;sf=t.dataset.f;$$('.tile').forEach(x=>x.classList.toggle('on',x===t));drawPad()};
@@ -638,7 +750,8 @@ $('#go').onclick=function(){
   const pl={date:$('#date').value,type:kind,category:cat,account:kind==='轉帳'?'':a,fromAccount:kind==='轉帳'?a:'',toAccount:b,amount:String(n0),note:$('#note').value,project:$('#proj').value,fee:$('#fee').value,currency:$('#cur').value,foreignAmount:$('#fa').value};
   if(ed)return send(this,'editExpense',{orig:ed.orig,next:pl},()=>{toast('已修改');clearAdd();backList('e')});
   const sum=`${icon(cat)} ${cat} ${kind==='轉帳'?a+' ➜ '+b+' ':''}${kind==='收入'?'+':kind==='支出'?'-':''}${n0.toLocaleString()}`,c0=cat,k0=kind,nt=pl.note.trim();
-  send(this,'addExpense',pl,d=>{setLast(sum,d);if(d){if(k0==='收入')burst('coin');else if(k0==='支出')burst('drop','-'+n0.toLocaleString());else if(c0==='存款')burst('pop','🐷')}
+  send(this,'addExpense',pl,d=>{setLast(sum,d,{k:'e',pl});
+    if(k0!=='轉帳'){const ck=JSON.stringify([k0,c0,a,'',nt]);CB[ck]={n:((CB[ck]||{}).n||0)+1,t:Date.now()};st.set('combo',JSON.stringify(CB))}if(d){if(k0==='收入')burst('coin');else if(k0==='支出')burst('drop','-'+n0.toLocaleString());else if(c0==='存款')burst('pop','🐷')}
     if(k0!=='轉帳'){LA[c0]=a;st.set('lastAcc',JSON.stringify(LA))}accTouched=false;
     if(nt){NH=[{c:c0,n:nt}].concat(NH.filter(x=>!(x.c===c0&&x.n===nt))).slice(0,60);st.set('notes',JSON.stringify(NH))}amt='';cat='';['note','fee','fa'].forEach(i=>$('#'+i).value='');$('#proj').value='';$('#cur').value='';drawCats();updNum()})};
 $('#sGo').onclick=function(){
@@ -651,12 +764,12 @@ $('#sGo').onclick=function(){
     else if(tr&&tr.status==='done')toast(`🔁 已同時記一筆投資轉帳：${tr.from} ➜ ${tr.to} ${Number(tr.amount).toLocaleString()}`,3500);else if(tr&&tr.status!=='done')toast('股票已記錄，但投資轉帳沒有自動記：'+tr.message+'，請到「記一筆」手動補',6000);
     setLast(`${STI[rec.type]} ${c} ${rec.type} ${q.toLocaleString()} 股 @ ${p}`,d);if(d&&rec.type==='定期定額')burst('pop','🐿️');
     sq='';sp='';$('#sC').value='';sf='q';$$('.tile').forEach(x=>x.classList.toggle('on',x.dataset.f==='q'));drawPad();updNum()})};
-$('#mk').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;mres=b.dataset.k;$$('#mk button').forEach(x=>x.classList.toggle('on',x===b));updGo()};
+$('#mk').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;mres=b.dataset.k;$('#p-m').dataset.k=mres;$$('#mk button').forEach(x=>x.classList.toggle('on',x===b));updGo()};
 $('#mGo').onclick=function(){const n0=ev(ma);if(!(n0>0))return toast(hasOp(ma)?'金額要大於 0':'請先輸入金額');
   if(edm)return send(this,'editMahjong',{orig:edm.orig,next:{date:$('#mD').value,result:mres,amount:String(n0)}},()=>{toast('已修改');endEditMj();backList('m')});
-  const r=mres,a=n0;send(this,'addMahjong',{date:$('#mD').value,result:mres,amount:String(n0)},d=>{setLast(`🀄 ${r} ${r==='贏'?'+':'-'}${a.toLocaleString()}`,d);if(d)burst(r==='贏'?'coin':'pop','🫠');ma='';updNum()})};
-$('#nav').onclick=e=>{const b=e.target.closest('button');if(b)goTab(b.dataset.t)};
-document.addEventListener('click',e=>{if(e.target.id==='toList'){setLM(mode);goTab('list')}else if(e.target.closest('#mjC'))openMj()});
+  const r=mres,a=n0;send(this,'addMahjong',{date:$('#mD').value,result:mres,amount:String(n0)},d=>{setLast(`🀄 ${r} ${r==='贏'?'+':'-'}${a.toLocaleString()}`,d,{k:'m',r,a});if(d)burst(r==='贏'?'coin':'pop','🫠');ma='';updNum()})};
+$('#nav').onclick=e=>{const b=e.target.closest('button');if(!b||Date.now()-navDrag<400)return;const a=TABS.indexOf($('.tab.on').id.slice(2)),n=TABS.indexOf(b.dataset.t);goTab(b.dataset.t,n===a?0:n>a?1:-1)};
+document.addEventListener('click',e=>{if(e.target.id==='redo')redoLast();else if(e.target.id==='toList'){setLM(mode);goTab('list',1)}else if(e.target.closest('#mjC'))openMj()});
 document.addEventListener('click',e=>{const b=e.target.closest('.tg');if(!b)return;const o=$('#'+b.dataset.t).classList.toggle('on');b.textContent=o?'收合':'展開'});
 async function openAcct(name){
   if(hid)return toast('請先按「顯示」');
@@ -683,7 +796,7 @@ function startEdit(r){
   $('#date').value=isoOf(r);$('#acc').value=r.transfer?r.from:r.account;$('#acc2').value=r.transfer?r.to:'';colorSel($('#acc'));colorSel($('#acc2'));
   $('#note').value=r.note||'';$('#proj').value=r.project||'';$('#fee').value=r.fee>0?r.fee:'';$('#cur').value='';$('#fa').value='';
   $('#proj').closest('details').open=!!(r.project||r.fee>0);
-  $('#eb').style.display='flex';accTouched=true;updGo();updNum();
+  $('#eb').style.display='flex';accTouched=true;drawCombos();updGo();updNum();
   goTab('rec');setMode('e')}
 function startEditMj(m){
   if(m.row==null)return toast('請先把後端程式更新到新版，才能使用修改',3500);
@@ -702,6 +815,8 @@ $('#pendGo').onclick=()=>{toast('補送中…',1200);load(true)};
 document.addEventListener('click',e=>{
   const mb=e.target.closest('[data-more]');if(mb){moreList(mb.dataset.more);return}
   const q=e.target.closest('[data-q]');if(q){const qid=q.dataset.q;ask('⏳ 這筆還在等補送','它還存在手機裡、沒有送出去。要把它丟掉嗎？','丟掉','留著').then(ok=>{if(ok){Q=Q.filter(x=>x.id!==qid);saveQ();render()}});return}
+  const ab=e.target.closest('.ract [data-act]');if(ab){rowAct(ab);return}
+  const rw=e.target.closest('#rec .row[data-e],#mjL .row[data-m]');if(rw&&Date.now()-(rw._sw||0)<400)return;if(rw&&rw.classList.contains('open')){closeRow(rw);return}
   const x=e.target.closest('[data-e]');if(x&&EL[+x.dataset.e]){startEdit(EL[+x.dataset.e]);return}
   const y=e.target.closest('[data-m]');if(y&&ML[+y.dataset.m])startEditMj(ML[+y.dataset.m])});
 /* ===== 月報表（後端算好，這裡只顯示；轉帳的存款、繳卡費不算，投資算支出） ===== */
@@ -710,7 +825,7 @@ async function loadMonthly(){
   if(!cfg.token)return;const m=mon;
   try{const d=await api('monthly',{month:m});MD[m]=d;st.set('mon',JSON.stringify(MD))}
   catch(e){if(String(e.message).includes('未知的動作')&&!monWarned){monWarned=true;toast('月報表需要先更新後端程式',3500)}}
-  if(m===mon)renderMonthly()}
+  if(m===mon)renderMonthly();renderMbar()}
 function renderMonthly(){
   const d=MD[mon];$('#mLb').textContent=mon.slice(0,4)+'年'+(+mon.slice(5))+'月';$('#mN').disabled=mon>=today.slice(0,7);$('#mP').disabled=!!minMon&&mon<=minMon;
   if(!d){['mI','mE','mB'].forEach(i=>{$('#'+i).textContent='-';$('#'+i).className=''});$('#mC').innerHTML='';return}
@@ -720,7 +835,7 @@ function renderMonthly(){
   const tot=cs.reduce((a,c)=>a+c.value,0),pal=['#4285f4','#ea4335','#fbbc04','#34a853','#b388ff','#ff8a65','#8c97a9'];let ac=0;
   const stops=cs.map((c,i)=>{const f=ac/tot*100;ac+=c.value;return`${pal[i]} ${f}% ${ac/tot*100}%`}).join(',');
   MCS=hid?[]:cs.map(c=>({name:c.name,names:c.name==='其餘分類'?d.cats.slice(6).map(z=>z.name):[c.name]}));
-  $('#mC').innerHTML=hid?'':!cs.length?'<div class="empty">這個月還沒有支出</div>':`<div class="hch" style="cursor:default"><div class="donut" style="background:conic-gradient(${stops})"></div><div class="hlg">${cs.map((c,i)=>`<div class="row" data-mc="${i}" style="cursor:pointer"><div class="l"><i class="dot" style="background:${pal[i]}"></i><div>${icon(c.name)} ${c.name}<small>${fmt(c.value)}</small></div></div><b>${(c.value/tot*100).toFixed(1)}%</b></div>`).join('')}</div></div>`}
+  $('#mC').innerHTML=hid?'':!cs.length?'<div class="empty ill"><div class="em">🎉</div>這個月還沒有支出，太棒了</div>':`<div class="hch" style="cursor:default"><div class="donut" style="background:conic-gradient(${stops})"></div><div class="hlg">${cs.map((c,i)=>`<div class="row" data-mc="${i}" style="cursor:pointer"><div class="l"><i class="dot" style="background:${pal[i]}"></i><div>${icon(c.name)} ${c.name}<small>${fmt(c.value)}</small></div></div><b>${(c.value/tot*100).toFixed(1)}%</b></div>`).join('')}</div></div>`}
 let minMon=st.get('minMon')||'';
 $('#mP').onclick=async function(){if(this.disabled)return;const pm=shiftMonth(mon,-1);let d=MD[pm];
   if(!d||!d.count){this.disabled=true;try{d=await api('monthly',{month:pm});MD[pm]=d;st.set('mon',JSON.stringify(MD))}catch(e){renderMonthly();return toast('失敗：'+e.message,3000)}}
