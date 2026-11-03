@@ -121,6 +121,35 @@ main{overflow-x:hidden}.tab.sl{animation:sl .22s ease-out}.tab.sr{animation:sr .
 /* 隱藏＝模糊（底下是假數字），顯示時慢慢變清楚 */
 .pv{transition:filter .5s ease,opacity .5s ease}#app.priv .pv{filter:blur(7px);opacity:.85;user-select:none}
 #app.priv .big.pv{filter:blur(10px)}
+/* 每個頁籤的標題列固定在上方（毛玻璃），捲動後底下出現一條細線 */
+.top{position:sticky;top:-16px;z-index:6;margin:-16px -16px 12px;padding:14px 16px 10px;background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border-bottom:1px solid transparent;transition:border-color .2s}
+.top.sc{border-bottom-color:rgba(255,255,255,.07)}
+/* 底部選單：目前頁籤有一顆發光膠囊，切換時滑過去 */
+nav{position:relative;background:linear-gradient(180deg,color-mix(in srgb,var(--card) 80%,transparent),var(--card));border-top:1px solid rgba(255,255,255,.06)}
+nav button{position:relative;z-index:1}nav .on{color:#fff}
+#npill{position:absolute;top:5px;bottom:7px;left:calc(var(--i,0) * 25% + 14px);width:calc(25% - 28px);border-radius:16px;background:linear-gradient(135deg,rgba(46,230,196,.22),rgba(91,63,232,.34));box-shadow:0 0 18px rgba(91,63,232,.35),inset 0 0 0 1px rgba(255,255,255,.08);transition:left .35s cubic-bezier(.3,1.3,.5,1)}
+/* 更多漸層：背景微光、卡片、按鈕、選取中的選項 */
+body{background:radial-gradient(900px 500px at -10% -5%,rgba(46,230,196,.10),transparent 60%),radial-gradient(800px 600px at 110% 0%,rgba(91,63,232,.14),transparent 60%),radial-gradient(700px 500px at 50% 110%,rgba(10,124,192,.10),transparent 60%),var(--bg) fixed}
+.card{background:linear-gradient(160deg,rgba(143,169,230,.07),rgba(143,169,230,0) 55%),var(--card);border:1px solid rgba(255,255,255,.05)}
+.go{background:linear-gradient(135deg,#2ee6c4,#0a7cc0 40%,#5b3fe8);color:#fff!important;box-shadow:0 6px 18px rgba(91,63,232,.3)}
+.seg button.on{background:linear-gradient(135deg,#2b3656,#33306a)}
+.chip.on{background:linear-gradient(135deg,#8fa9e6,#7b6cf0);border-color:transparent;color:#fff}
+#kind .on[data-k="收入"],#mk .on[data-k="贏"],#sk .on[data-k="買進"]{background:linear-gradient(135deg,#ff6b61,#e2477a)}
+#kind .on[data-k="支出"],#mk .on[data-k="輸"],#sk .on[data-k="賣出"]{background:linear-gradient(135deg,#3fcf8e,#169c9c)}
+#kind .on[data-k="轉帳"]{background:linear-gradient(135deg,#b388ff,#6f5bff)}#sk .on[data-k="定期定額"]{background:linear-gradient(135deg,#40c4ff,#0277bd)}
+/* 持股卡片 */
+.hcard{position:relative;margin-top:10px;padding:12px 14px 10px 16px;border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--hc) 16%,var(--card)),var(--card) 70%);border:1px solid color-mix(in srgb,var(--hc) 24%,transparent);cursor:pointer}
+.hcard::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:2px;background:var(--hc)}
+.hc1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.hc1 b{font-size:17px}.hc1 small{display:block;color:var(--sub);font-size:12px;margin-top:2px}
+.tag{flex:0 0 auto;font-size:13px;font-weight:700;padding:3px 9px;border-radius:10px;background:color-mix(in srgb,currentColor 15%,transparent)}
+.hc2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:10px 0 8px;font-size:14px;font-variant-numeric:tabular-nums}.hc2 small{display:block;color:var(--sub);font-size:11px}
+.hbar{height:4px;border-radius:2px;background:var(--soft);overflow:hidden}.hbar i{display:block;height:100%;background:var(--hc);border-radius:2px}
+.hw{display:block;color:var(--sub);font-size:11px;margin-top:4px;text-align:right}#holds .sub{margin-top:14px}#holds .sub:first-child{margin-top:0}
+/* 投資頁大卡片：賺錢帶紅光、賠錢帶綠光，隱藏時是中性的藍紫 */
+.hero.inv{background:linear-gradient(150deg,#14306e,#1d2a6b 55%,#2d2470);transition:background .6s}
+.hero.inv.gain{background:radial-gradient(120% 90% at 100% 0%,rgba(255,107,97,.42),transparent 62%),linear-gradient(150deg,#3b1426,#2a1640 60%,#1a1d4a)}
+.hero.inv.loss{background:radial-gradient(120% 90% at 100% 0%,rgba(63,207,142,.38),transparent 62%),linear-gradient(150deg,#0f3a2e,#12304a 60%,#1a1d4a)}
+.hero.inv .up{color:#ffb3ad}.hero.inv .down{color:#9ff0c8}.hero.inv .big{text-shadow:0 2px 18px rgba(0,0,0,.25)}
 /* 信用卡卡片 */
 .ccw{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 12px;scrollbar-width:none}.ccw::-webkit-scrollbar{display:none}
 .cc{flex:0 0 86%;aspect-ratio:1.586;scroll-snap-align:start;border-radius:18px;padding:16px 18px;color:#fff;background:radial-gradient(circle at 88% 12%,rgba(255,255,255,.16) 0 18%,transparent 19%),radial-gradient(circle at 105% 105%,rgba(255,255,255,.10) 0 42%,transparent 43%),linear-gradient(135deg,var(--c1),var(--c2));position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.35);transform:perspective(700px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out}
@@ -172,7 +201,7 @@ main{overflow-x:hidden}.tab.sl{animation:sl .22s ease-out}.tab.sr{animation:sr .
 <div class="card"><div class="hd"><h2>帳戶餘額</h2><button class="ico tg" data-t="accs">展開</button></div><div class="recbody" id="accs"></div></div></section>
 
 <section class="tab" id="t-inv"><div class="top"><b>投資總覽</b><span><button class="ico" id="eye2">顯示</button></span></div>
-<div class="hero plain"><small>未實現損益</small><div class="big pv" id="ug"><span id="ugv">-</span><span class="pc" id="ugp"></span></div><div class="leg" style="justify-content:flex-end"><span id="rg"></span></div></div>
+<div class="hero inv" id="invH"><small>未實現損益</small><div class="big pv" id="ug"><span id="ugv">-</span><span class="pc" id="ugp"></span></div><div class="leg" style="justify-content:flex-end"><span id="rg"></span></div></div>
 <div class="card"><h2>資金配置</h2><div id="fund">
 <div class="fl" style="margin-bottom:12px"><span>可投入資金</span><b class="pv" id="in3" style="font-size:20px"></b></div>
 <div class="prog" style="margin:0 0 8px"><i id="inb"></i></div>
@@ -221,7 +250,7 @@ main{overflow-x:hidden}.tab.sl{animation:sl .22s ease-out}.tab.sr{animation:sr .
 <p class="hint">點一下日常或麻將的記錄可以修改、刪除；股票請回 Sheet 修改</p>
 </section>
 </main>
-<nav id="nav"><button class="on" data-t="home"><b>🏠</b>總覽</button><button data-t="inv"><b>📈</b>投資</button><button data-t="rec"><b>✏️</b>記一筆</button><button data-t="list"><b>🧾</b>明細</button></nav>
+<nav id="nav"><i id="npill"></i><button class="on" data-t="home"><b>🏠</b>總覽</button><button data-t="inv"><b>📈</b>投資</button><button data-t="rec"><b>✏️</b>記一筆</button><button data-t="list"><b>🧾</b>明細</button></nav>
 <div id="asheet"><div class="pn"><div class="hd"><b id="at"></b><button class="ico" id="ax">關閉</button></div><div id="al"></div></div></div>
 <div class="toast" id="toast"></div>
 <div id="cdlg"><div class="cb"><div class="ct" id="cT"></div><p id="cM"></p><div class="cbt"><button class="no" id="cN">再想想</button><button class="yes" id="cY">確定</button></div></div></div>
@@ -394,8 +423,9 @@ let lastSync=0,loading=false;
 const hhmm=t=>new Date(t).toTimeString().slice(0,5);
 function saveCache(){lastSync=Date.now();st.set('cache',JSON.stringify({D,R,t:lastSync}))}
 function loadCache(){try{const c=JSON.parse(st.get('cache')||'null');if(c&&c.D){D=c.D;R=c.R;lastSync=c.t;return true}}catch(e){}return false}
-async function fetchAll(){
-  try{const a=await api('all');return[a.dashboard,a.recent]}
+// 後端會把結果快取 30 秒；按「同步」時帶 nocache 一定重讀
+async function fetchAll(nc){
+  try{const a=await api('all',nc?{nocache:true}:{});return[a.dashboard,a.recent]}
   catch(e){if(String(e.message).includes('未知的動作'))return Promise.all([api('dashboard'),api('recent')]);throw e}}
 let namesBusy=false;
 async function ensureNames(){
@@ -404,11 +434,11 @@ async function ensureNames(){
   if(!need.length||Date.now()-(+st.get('namesTry')||0)<6*36e5)return;
   namesBusy=true;st.set('namesTry',String(Date.now()));
   try{const nm=await api('fetchNames',{codes:need});D.holdings.forEach(h=>{const b=h.code.replace('定期定額','').trim();if(nm[b])h.name=nm[b]});saveCache();render()}catch(e){}finally{namesBusy=false}}
-async function load(force){
+async function load(force,nc){
   if(!cfg.token){openSetup('');return}
   if(loading){if(!force)return;while(loading)await new Promise(r=>setTimeout(r,200))}loading=true;
   $('#sync').textContent=D?'更新中…':'讀取中…';
-  try{if(Q.length)await flushQ();[D,R]=await fetchAll();saveCache();$('#sync').textContent='已同步 '+hhmm(lastSync)}
+  try{if(Q.length)await flushQ();[D,R]=await fetchAll(nc);saveCache();$('#sync').textContent='已同步 '+hhmm(lastSync)}
   catch(e){$('#sync').textContent=D?'離線 · '+hhmm(lastSync):'未連線';$('#app').classList.remove('ld');toast(e.message==='Failed to fetch'?'連線失敗，顯示上次資料':e.message,3000)}
   finally{loading=false}
   render();ensureNames();loadMonthly()}
@@ -431,6 +461,9 @@ function ccard(a,i){const u=a.limit>0?Math.min(100,Math.max(0,-a.balance)/a.limi
   <div>${u>=0?`<div class="ccl"><i style="width:${hid?0:u}%;${u>=80?'background:#ff8a80':''}"></i></div><div class="ccf"><span>已用 ${HP(u.toFixed(0)+'%')}</span><span>剩餘 ${HP(fmt(a.limit+a.balance))}</span></div>`:'<div class="ccf"><span>信用卡</span></div>'}</div></div>`}
 $('#accs').addEventListener('pointermove',e=>{const c=e.target.closest('.cc');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*14+'deg');c.style.setProperty('--rx',(.5-(e.clientY-r.top)/r.height)*14+'deg')});
 $('#accs').addEventListener('pointerout',e=>{const c=e.target.closest('.cc');if(c&&!c.contains(e.relatedTarget)){c.style.removeProperty('--rx');c.style.removeProperty('--ry')}});
+// 記一筆的帳戶選單（切換支出／收入／轉帳時只要重畫這裡，不用整個 render）
+const ACOL={bank:'#f0a06a',sec:'#6fbf73',card:'#5aa7e0'};
+function renderAccSel(){if(!D)return;['acc','acc2'].forEach((id,i)=>{const e=$('#'+id),v=e.value;e.innerHTML='<option value="">'+(i?'轉入帳戶':kind==='轉帳'?'轉出帳戶':'帳戶')+'</option>'+D.accounts.map(a=>`<option style="color:${ACOL[a.type]}">${a.name}</option>`).join('');e.value=v;colorSel(e)})}
 /* 數字滾動：從上次的值滾到新的值；隱藏時直接放假數字，下次顯示從 0 滾起 */
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches,loc=n=>Math.round(n).toLocaleString();
 function roll(sel,v,f){const el=$(sel);
@@ -446,15 +479,22 @@ function render(){hideSplash();$('#app').classList.toggle('priv',hid);
   const mj=S(sm,'麻將記帳').value,fam=S(sm,'家庭開銷').value;
   roll('#fam',fam,loc);$('#fam').className='pv'+(!hid&&fam<0?' neg':'');
   roll('#mjB',mj,sg);$('#mjB').className='pv'+(hid?'':mj>=0?' up':' down');
-  const col={bank:'#f0a06a',sec:'#6fbf73',card:'#5aa7e0'},lab={bank:'帳戶',sec:'股票',card:'信用卡'};
+  const col=ACOL,lab={bank:'帳戶',sec:'股票',card:'信用卡'};
   const aRow=a=>{const u=a.type==='card'&&a.limit>0?Math.min(100,Math.max(0,-a.balance)/a.limit*100):-1;return`<div class="row" data-a="${a.name}" style="cursor:pointer"><div class="l"><i class="dot" style="background:${col[a.type]}"></i><div>${a.name}<small>${u>=0?(hid?'已用額度 '+HP('88%'):`已用 ${u.toFixed(0)}% · 剩餘 ${fmt(a.limit+a.balance)}`):lab[a.type]}</small>${u>=0?`<div class="ubar"><i style="width:${hid?0:u}%;background:${u>=80?'var(--up)':col.card}"></i></div>`:''}</div></div><b class="pv${!hid&&a.balance<0?' neg':''}">${H(fmt(a.balance))}</b></div>`};
   $('#accs').innerHTML=[['bank','銀行'],['sec','證券'],['card','信用卡']].map(([t,n])=>{const g=D.accounts.filter(a=>a.type===t);if(!g.length)return'';const sum=g.reduce((p,a)=>p+a.balance,0);return`<div class="sub ag"><span>${n}</span>${HP(fmt(sum))}</div>`+(t==='card'?`<div class="ccw">${g.map(ccard).join('')}</div>`:g.map(aRow).join(''))}).join('');
   const ug=S(s,'未實現總損益').value,rv=S(s,'已實現總損益').value,cl=n=>n>=0?'up':'down';
-  roll('#ugv',ug,sg);$('#ugp').textContent='（'+IH(S(s,'未實現總損益%').text)+'）';$('#ug').className='big pv'+(ih?'':' '+cl(ug));
+  roll('#ugv',ug,sg);$('#ugp').textContent='（'+IH(S(s,'未實現總損益%').text)+'）';$('#ug').className='big pv';$('#invH').className='hero inv'+(ih?'':ug>=0?' gain':' loss');
   $('#rg').innerHTML='已實現損益 <span class="pv'+(ih?'':' '+cl(rv))+'">'+IH(sg(rv))+'（'+IH(S(s,'已實現總損益%').text)+'）</span>';$('#rg').className='';
   roll('#sc',S(s,'股票總成本').value,loc);roll('#sv',S(s,'股票總現值').value,loc);{const v=S(s,'股票總現值').value,c0=S(s,'股票總成本').value;$('#sv').className='pv'+(ih?'':v>c0?' up':v<c0?' down':'')}
-  const hr=h=>{const c=h.gain>=0?'up':'down';return`<div class="hold" data-h="${h.code}" style="cursor:pointer"><div>${h.code.replace('定期定額','').trim()} <span class="hq">${h.qty.toLocaleString()} 股</span><small>均價 ${h.avg!=null?String(+Number(h.avg).toFixed(2)):h.qty?String(+(h.cost/h.qty).toFixed(2)):'-'}</small><small>現價 ${h.price!=null?String(+Number(h.price).toFixed(2)):h.qty?String(+(h.value/h.qty).toFixed(2)):'-'}</small></div><div class="r g ${c}" style="font-size:14px;font-weight:700">${sg(h.gain)}(${h.gainPct})</div><div class="r" style="font-size:14px;line-height:1.5"><div><span style="color:var(--sub)">成本</span> <span class="n">${h.cost.toLocaleString()}</span></div><div><span style="color:var(--sub)">現值</span> <span class="n ${h.value>h.cost?'up':h.value<h.cost?'down':''}">${h.value.toLocaleString()}</span></div></div></div>`},sec=(t,a)=>a.length?`<div class="sub">${t}</div>`+a.map(hr).join(''):'';
-  $('#holds').innerHTML=ih?'<div class="hold pv"><div>0050 <span class="hq">888 股</span><small>均價 88.88</small></div><div class="r g">+888(8.88%)</div></div>':sec('定期定額',D.holdings.filter(h=>h.code.includes('定期定額')))+sec('現股',D.holdings.filter(h=>!h.code.includes('定期定額')))||'<div class="empty">沒有持股</div>';
+  // 持股卡片：顏色和持股比例圓餅圖一致（同代號同色），底下細條是佔全部持股現值的比例
+  const hBase=h=>h.code.replace('定期定額','').trim(),hVal=new Map();D.holdings.filter(h=>h.value>0).forEach(h=>hVal.set(hBase(h),(hVal.get(hBase(h))||0)+h.value));
+  const hOrd=[...hVal].sort((x,y)=>y[1]-x[1]).map(x=>x[0]),hTot=[...hVal.values()].reduce((a,b)=>a+b,0),HCC=['#4285f4','#ea4335','#fbbc04','#34a853','#b388ff','#ff8a65'];
+  const hr=h=>{const b=hBase(h),c=h.gain>=0?'up':'down',w=hTot>0?Math.max(0,h.value)/hTot*100:0,vc=h.value>h.cost?'up':h.value<h.cost?'down':'',
+      avg=h.avg!=null?String(+Number(h.avg).toFixed(2)):h.qty?String(+(h.cost/h.qty).toFixed(2)):'-',px=h.price!=null?String(+Number(h.price).toFixed(2)):h.qty?String(+(h.value/h.qty).toFixed(2)):'-',pct=(h.gain>0&&!/^[+-]/.test(h.gainPct)?'+':'')+h.gainPct;
+    return`<div class="hcard" data-h="${h.code}" style="--hc:${HCC[Math.max(0,hOrd.indexOf(b))%6]}"><div class="hc1"><div><b>${b}</b> <span class="nm">${esc(h.name||'')}</span><small>${h.qty.toLocaleString()} 股 · 均價 ${avg} · 現價 ${px}</small></div><span class="tag ${c}">${pct}</span></div>
+    <div class="hc2"><div><small>成本</small>${h.cost.toLocaleString()}</div><div><small>現值</small><span class="${vc}">${h.value.toLocaleString()}</span></div><div class="r"><small>損益</small><b class="${c}">${sg(h.gain)}</b></div></div>
+    <div class="hbar"><i style="width:${w.toFixed(1)}%"></i></div><small class="hw">佔持股 ${w.toFixed(1)}%</small></div>`},sec=(t,a)=>a.length?`<div class="sub">${t}</div>`+a.map(hr).join(''):'';
+  $('#holds').innerHTML=ih?'<div class="hcard pv" style="--hc:#4285f4"><div class="hc1"><div><b>0050</b><small>888 股 · 均價 88.88 · 現價 88.88</small></div><span class="tag up">+8.88%</span></div><div class="hbar"><i style="width:60%"></i></div></div>':sec('定期定額',D.holdings.filter(h=>h.code.includes('定期定額')))+sec('現股',D.holdings.filter(h=>!h.code.includes('定期定額')))||'<div class="empty">沒有持股</div>';
   const nm={};D.holdings.forEach(h=>{if(h.name)nm[h.code.replace('定期定額','').trim()]=h.name});const nameOf=c=>nm[c]||'';
   const hcC=['#4285f4','#ea4335','#fbbc04','#34a853','#b388ff','#ff8a65'],hcS=[...D.holdings.filter(h=>h.value>0).reduce((m,h)=>{const n=h.code.replace('定期定額','').trim();m.set(n,(m.get(n)||0)+h.value);return m},new Map())].map(([n,v])=>({n,v})).sort((x,y)=>y.v-x.v),hcT=hcS.reduce((a,b)=>a+b.v,0);let hcA=0;
   const hcStops=hcS.map((x,i)=>{const f=hcA/hcT*100;hcA+=x.v;return`${hcC[i%6]} ${f}% ${hcA/hcT*100}%`}).join(',');
@@ -462,7 +502,7 @@ function render(){hideSplash();$('#app').classList.toggle('priv',hid);
   $('#codes').innerHTML=[...new Set(D.holdings.map(h=>h.code.replace('定期定額','').trim()))].map(c=>`<button class="chip" data-sc="${c}">${c}</button>`).join('');
   $('#in1').textContent=IH(S(s,'已投入資金').value.toLocaleString())+'（'+IH(S(s,'已投入資金%').text)+'）';$('#inb').style.width=ih?0:S(s,'已投入資金%').value*100+'%';
   $('#in2').textContent=IH(S(s,'未投入資金').value.toLocaleString())+'（'+IH(S(s,'未投入資金%').text)+'）';roll('#in3',S(s,'可投入資金').value,loc);
-  ['acc','acc2'].forEach((id,i)=>{const e=$('#'+id),v=e.value;e.innerHTML='<option value="">'+(i?'轉入帳戶':kind==='轉帳'?'轉出帳戶':'帳戶')+'</option>'+D.accounts.map(a=>`<option style="color:${col[a.type]}">${a.name}</option>`).join('');e.value=v;colorSel(e)});
+  renderAccSel();
   syncX();if(R){EL=SR.e?mergeRec(SR.e.recs):shownE();ML=SR.m?SR.m.recs:shownM()}
   let lastD='';
   $('#rec').innerHTML=pendHtml('addExpense')+EL.map((r,i)=>{const d=isoOf(r),h=d!==lastD?dayHead(d):'';lastD=d;return h+(r.transfer?trRow(r,i):`<div class="row" data-e="${i}" style="cursor:pointer">${rowL(icon(r.category),r.category,`${r.date} · ${r.account}${r.note?' · '+esc(r.note):''}`)}<b class="${r.type==='收入'?'up':'down'}">${r.type==='收入'?'+':'-'}${r.amount.toLocaleString()}</b></div>`)}).join('')||EMP('e');
@@ -513,10 +553,11 @@ let mode='e',lmode='e',sk='買進',smd='現股',su='股',sf='q',sq='',sp='',ma='
 function setL(id,l,d){const b=$('#'+id);b.dataset.l=l;b.dataset.done=d;if(!b.disabled&&!b.classList.contains('ok'))b.textContent=l}
 function updGo(){setL('go',ed?'✏️ 儲存修改':GOL[kind],ed?'✓ 已修改':GOD[kind]);setL('sGo',GOL[sk],GOD[sk]);setL('mGo',edm?'✏️ 儲存修改':GOL[mres],edm?'✓ 已修改':GOD[mres]);
   ['go','sGo','mGo'].forEach((id,i)=>$('#'+id).style.display='esm'[i]===mode?'':'none')}
-function goTab(t,dir){$$('nav button').forEach(x=>x.classList.toggle('on',x.dataset.t===t));$$('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+t));$('main').scrollTop=0;
+function goTab(t,dir){$$('nav button').forEach(x=>x.classList.toggle('on',x.dataset.t===t));$('#nav').style.setProperty('--i',['home','inv','rec','list'].indexOf(t));$$('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+t));$('main').scrollTop=0;
   if(dir){const s=$('#t-'+t);s.classList.remove('sl','sr');void s.offsetWidth;s.classList.add(dir>0?'sl':'sr')}}
 /* 左右滑動切換頁籤（總覽 ⇄ 投資 ⇄ 記一筆 ⇄ 明細）；從輸入框、數字鍵盤、信用卡卡片開始滑的不算 */
 const TABS=['home','inv','rec','list'];let tx=null;
+$('main').addEventListener('scroll',()=>{const s=$('main').scrollTop>4;$$('.top').forEach(t=>t.classList.toggle('sc',s))},{passive:true});
 $('main').addEventListener('touchstart',e=>{const t=e.touches[0];tx=e.touches.length===1&&!e.target.closest('input,select,textarea,#pad,.ccw')?{x:t.clientX,y:t.clientY,t:Date.now()}:null},{passive:true});
 $('main').addEventListener('touchend',e=>{if(!tx)return;const t=e.changedTouches[0],dx=t.clientX-tx.x,dy=t.clientY-tx.y,ok=Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.8&&Date.now()-tx.t<700;tx=null;if(!ok)return;
   const n=TABS.indexOf($('.tab.on').id.slice(2))+(dx<0?1:-1);if(n>=0&&n<TABS.length)goTab(TABS[n],dx<0?1:-1)},{passive:true});
@@ -555,7 +596,7 @@ function drawNotes(){const seen=new Set(),out=[];
   if(cat)NH.filter(x=>x.c===cat).concat(((R&&R.expenses)||[]).filter(x=>x.category===cat).map(x=>({n:x.note}))).forEach(x=>{const n=String(x.n||'').trim();if(n&&!seen.has(n)&&out.length<6){seen.add(n);out.push(n)}});
   $('#nchips').innerHTML=out.map(n=>`<button class="chip nc" data-n="${esc(n)}">${esc(n)}</button>`).join('')}
 $('#nchips').onclick=e=>{const b=e.target.closest('[data-n]');if(b)$('#note').value=b.dataset.n};
-function setKind(k){if(ed&&ed.orig.length===2&&k!=='轉帳')return toast('一般記錄和轉帳不能互相切換，請回 Sheet 修改');kind=k;cat='';$$('#kind button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));$('#acc2').style.display=k==='轉帳'?'':'none';drawCats();updGo();render()}
+function setKind(k){if(ed&&ed.orig.length===2&&k!=='轉帳')return toast('一般記錄和轉帳不能互相切換，請回 Sheet 修改');kind=k;cat='';$$('#kind button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));$('#acc2').style.display=k==='轉帳'?'':'none';drawCats();updGo();renderAccSel();renderCtx()}
 function clearAdd(){ed=null;accTouched=false;$('#eb').style.display='none';amt='';cat='';['note','fee','fa'].forEach(i=>$('#'+i).value='');$('#date').value=today;$('#proj').value='';$('#cur').value='';$('#acc').value='';$('#acc2').value='';setKind('支出');updNum()}
 $('#kind').onclick=e=>{const b=e.target.closest('[data-k]');if(b)setKind(b.dataset.k)};
 $('#cats').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;cat=b.dataset.c;drawCats();if(kind==='轉帳'){if(cat==='投資'){const sc=D&&D.accounts.find(a=>a.type==='sec');$('#acc').value=(D&&D.invFrom)||'';$('#acc2').value=sc?sc.name:''}else $('#acc2').value='';colorSel($('#acc'));colorSel($('#acc2'))}
@@ -628,7 +669,7 @@ $('#asheet').onclick=e=>{if(e.target.id==='asheet'||e.target.id==='ax')$('#ashee
 function colorSel(e){const o=e.selectedOptions[0];e.style.color=o&&o.style.color?o.style.color:''}
 ['acc','acc2'].forEach(i=>$('#'+i).addEventListener('change',e=>{if(i==='acc')accTouched=true;colorSel(e.target);renderCtx()}));
 function openSetup(m){hideSplash();$('#cu').value=cfg.url;$('#ct').value='';$('#cm').textContent=m||'';$('#setup').classList.add('on')}
-$('#gear').onclick=()=>openSetup('');$('#sy').onclick=()=>{toast('同步中…',1000);load(true)};$('#eye').textContent=hid?'顯示':'隱藏';$('#eye').onclick=togEye;function togEye(){hid=!hid;ih=hid;$('#eye').textContent=$('#eye2').textContent=hid?'顯示':'隱藏';render()}
+$('#gear').onclick=()=>openSetup('');$('#sy').onclick=()=>{toast('同步中…',1000);load(true,true)};$('#eye').textContent=hid?'顯示':'隱藏';$('#eye').onclick=togEye;function togEye(){hid=!hid;ih=hid;$('#eye').textContent=$('#eye2').textContent=hid?'顯示':'隱藏';render()}
 $('#hchart').onclick=()=>$('#hbtn').click();
 $('#eye2').onclick=togEye;
 $('#cs').onclick=()=>{const u=$('#cu').value.trim(),t=$('#ct').value.trim();if(!u||!t)return($('#cm').textContent='網址和密碼都要填');cfg={url:u,token:t};st.set('url',u);st.set('token',t);$('#setup').classList.remove('on');load()};
@@ -691,4 +732,8 @@ setInterval(()=>{if(Q.length&&!document.hidden)flushQ()},60000);
 ['date','sD','mD'].forEach(i=>$('#'+i).value=today);drawCats();drawPad();updGo();updNum();if(loadCache()){render();$('#sync').textContent='上次同步 '+hhmm(lastSync)}load();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cfg.token&&(Date.now()-lastSync>60000||Q.length))load()});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+// 有新版本：等 App 切到背景、而且沒有正在輸入或修改的內容時，悄悄重新整理
+let updReady=false;const idle=()=>!amt&&!ma&&!sq&&!sp&&!ed&&!edm&&!busy&&!$('#note').value;
+if('serviceWorker'in navigator)navigator.serviceWorker.addEventListener('message',e=>{if(e.data==='updated')updReady=true});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&updReady&&idle())location.reload()});
 </script></body></html>
